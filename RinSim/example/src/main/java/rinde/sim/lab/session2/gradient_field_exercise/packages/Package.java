@@ -5,6 +5,7 @@ import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
+import rinde.sim.lab.session2.gradient_field_exercise.trucks.Truck;
 
 public class Package implements SimulatorUser, RoadUser{
 	public final String packageID;
@@ -55,6 +56,14 @@ public class Package implements SimulatorUser, RoadUser{
 	
 	public Point getDeliveryLocation(){
 		return deliveryLocation.getPosition();
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Package)
+			return ((Package) o).packageID.equals(this.packageID);
+		
+		return false;
 	}
 
 	@Override

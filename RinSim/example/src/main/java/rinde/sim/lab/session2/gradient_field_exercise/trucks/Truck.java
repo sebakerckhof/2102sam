@@ -18,6 +18,7 @@ public class Truck implements MovingRoadUser{
 	private Point startLocation;
 	private String truckID;
 	private double speed;
+	
 	private Package load;
 	protected static final Logger LOGGER = LoggerFactory.getLogger(Truck.class);
 	
@@ -65,6 +66,15 @@ public class Truck implements MovingRoadUser{
 	public Package getLoad(){
 		return this.load;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Truck)
+			return ((Truck) o).truckID.equals(this.truckID);
+		
+		return false;
+	}
+	
 	
 	public boolean tryPickup(){
 		if(load == null){

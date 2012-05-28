@@ -2,6 +2,7 @@ package rinde.sim.core.model.virtual;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +23,23 @@ public class GradientFieldModel implements Model<VirtualEntity>, GradientFieldAP
 	}
 	
 	public GradientFieldModel(RoadModel rm){
+		this();
+		this.rm = rm;
 		//TODO exercise
 	}
 
 	@Override
 	public Collection<Field> getFields(Point point) {
-		//TODO exercise
-		return null;
+		Collection<Field> fields = new HashSet<Field>();
+		
+		for(VirtualEntity e : entities){
+			if(e.isEmitting()){
+				double distance = rm.getTravelLength(point, e.getPosition()); //TODO only work with path distance and check with euclidian??
+				fields.add(new Field(e.getFieldData(), distance));
+			}
+		}
+		
+		return fields;
 	}
 
 	@Override
@@ -64,6 +75,31 @@ public class GradientFieldModel implements Model<VirtualEntity>, GradientFieldAP
 	@Override
 	public Class<VirtualEntity> getSupportedType() {
 		return VirtualEntity.class;
+	}
+
+	/**
+	 * Bereken de waarneembare gradient fields, hou enkel rekening met 
+	 */
+	@Override
+	public Collection<Field> getFieldsFrom(VirtualEntity entity) {
+		Collection<Field> fields = new HashSet<Field>();
+		
+		for(VirtualEntity e : entities){
+			if(e.isEmitting() && !e.equals(entity)){
+				double distance = rm.getTravelLength(entity.getPosition(), e.getPosition()); //TODO only work with path distance and check with euclidian??
+				if(distance < entity.getFieldData().getRadius())
+					fields.add(new Field(e.getFieldData(), distance));
+			}
+		}
+		
+		return fields;
+	}
+
+	//TODO: make list safe to modifications
+	@Override
+	public Collection<VirtualEntity> getEntities() {
+		Collection<VirtualEntity> entities = new LinkedList<VirtualEntity>(this.entities);
+		return entities;
 	}
 	
 }

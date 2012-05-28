@@ -130,9 +130,10 @@ public class GradientFieldModelTest {
 
 		@Override
 		public FieldData getFieldData() {
-			return new FieldData() {
+			return null;
+			/*return new FieldData() {
 				
-			};		
+			};		*/
 		}
 		
 	}

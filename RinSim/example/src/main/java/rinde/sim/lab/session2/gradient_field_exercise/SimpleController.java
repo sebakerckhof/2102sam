@@ -8,6 +8,7 @@ import rinde.sim.core.graph.Graph;
 import rinde.sim.core.graph.MultiAttributeEdgeData;
 import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
+import rinde.sim.core.model.virtual.GradientFieldModel;
 import rinde.sim.event.Event;
 import rinde.sim.lab.session2.gradient_field_exercise.packages.DeliveryLocation;
 import rinde.sim.lab.session2.gradient_field_exercise.packages.PackageAgent;
@@ -28,6 +29,7 @@ public class SimpleController extends ScenarioController{
 	String map;
 	
 	private RoadModel roadModel;
+	GradientFieldModel gradientModel;
 	
 	private int truckID = 0;
 	private int packageID = 0;
@@ -48,10 +50,13 @@ public class SimpleController extends ScenarioController{
 			throw new ConfigurationException("e:", e);
 		}
 		roadModel = new RoadModel(graph);
-
+		gradientModel = new GradientFieldModel(roadModel);
+		
 		MersenneTwister rand = new MersenneTwister(123);
 		Simulator s = new Simulator(rand, 10000);
 		s.register(roadModel);
+		s.register(gradientModel);
+		
 		return s;	
 	}
 	
@@ -62,7 +67,8 @@ public class SimpleController extends ScenarioController{
 		schema.add(Package.class, new RGB(255,0,0));
 		schema.add(DeliveryLocation.class, new RGB(0,255,0));
 
-		View.startGui(getSimulator(), 3, new ObjectRenderer(roadModel, schema, false));
+		//View.startGui(getSimulator(), 3, new ObjectRenderer(roadModel, schema, true), new FieldRenderer(gradientModel, schema));
+		View.startGui(getSimulator(), 3, new ObjectRenderer(roadModel, schema, true));
 
 		return true;
 	}

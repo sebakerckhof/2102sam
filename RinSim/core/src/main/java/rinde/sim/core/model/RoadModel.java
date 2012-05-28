@@ -422,6 +422,25 @@ public class RoadModel implements Model<RoadUser> {
 		//		}
 		return path;
 	}
+	
+	/**
+	 * Convenience method for gradient field extension
+	 *
+	 * @param from
+	 * @param to
+	 * 
+	 * @return
+	 */
+	public float getTravelLength(Point from, Point to){
+		List<Point> points = getShortestPathTo(from, to);
+		float distance = 0;
+		Point previous = from;
+		for(Point p : points){
+			distance += Point.distance(previous, p);
+			previous = p;
+		}
+		return distance;
+	}
 
 	public List<Point> getShortestPathTo(Point from, Point to) {
 		List<Point> path = new ArrayList<Point>();
