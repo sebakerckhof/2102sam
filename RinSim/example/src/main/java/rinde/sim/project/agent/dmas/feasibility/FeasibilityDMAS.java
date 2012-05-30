@@ -1,0 +1,7 @@
+package rinde.sim.project.agent.dmas.feasibility;
+
+import rinde.sim.project.model.DMAS;
+
+public class FeasibilityDMAS extends DMAS{
+
+}
