@@ -4,4 +4,5 @@ import rinde.sim.project.model.Pheromone;
 
 public class FeasibilityPheromone extends Pheromone{
 
+	protected PickupDMAS
 }

@@ -1,8 +1,6 @@
 package rinde.sim.lab.session1.catch_the_flag;
 
 
-import java.util.Random;
-
 import org.apache.commons.math.random.MersenneTwister;
 import org.eclipse.swt.graphics.RGB;
 
@@ -40,12 +38,8 @@ public class CatchTheFlag {
 		
 		DepotAgent depotAgent = new DepotAgent(graph.getRandomNode(rand));
 		simulator.register(depotAgent);
-		Random r = new Random(1317);
 		
-		for(int i = 0; i < 5; i++){
-			TruckAgent truckAgent = new TruckAgent(graph.getRandomNode(rand), r.nextDouble() * 100);
-			simulator.register(truckAgent);
-		}
+		//TODO Add your truck agents
 		
 		UiSchema schema = new UiSchema();
 		schema.add(TruckAgent.class, new RGB(255,0,0));

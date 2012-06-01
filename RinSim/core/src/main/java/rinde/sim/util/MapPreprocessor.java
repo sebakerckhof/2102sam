@@ -249,8 +249,12 @@ public class MapPreprocessor {
 				}
 			}
 
-			currentGraph.addConnection(connection.getKey(), connection.getValue());
-			currentGraph.addConnection(connection.getValue(), connection.getKey());
+			if (!currentGraph.hasConnection(connection.getKey(), connection.getValue())) {
+				currentGraph.addConnection(connection.getKey(), connection.getValue());
+			}
+			if (!currentGraph.hasConnection(connection.getValue(), connection.getKey())) {
+				currentGraph.addConnection(connection.getValue(), connection.getKey());
+			}
 			result = findNotFullyConnectedNodes(currentGraph);
 			if (result.get(0).isEmpty()) {
 				isFullyConnected = true;
@@ -526,7 +530,10 @@ public class MapPreprocessor {
 			if (graph.containsNode(current)) {
 				try {
 					path = Graphs.shortestPathEuclidianDistance(graph, current, root);
-				} catch (PathNotFoundException e) {}
+				} catch (PathNotFoundException e) {/*
+													 * this is intentionally
+													 * empty
+													 */}
 			}
 
 			if (path == null) {

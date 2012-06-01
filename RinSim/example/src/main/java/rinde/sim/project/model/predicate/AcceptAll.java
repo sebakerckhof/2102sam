@@ -9,5 +9,4 @@ public class AcceptAll<T> implements Predicate<T> {
 	public boolean apply(T input) {
 		return true;
 	}
-
 }

@@ -39,7 +39,7 @@ public class TruckAgent implements TickListener, SimulatorUser, CommunicationUse
 	 */
 	@Override
 	public void tick(long currentTime, long timeStep) {
-		//TODO exercise                                          
+		//TODO exercise
 		if(path == null || path.isEmpty()){
 			truck.tryPickup();
 			truck.tryDelivery();

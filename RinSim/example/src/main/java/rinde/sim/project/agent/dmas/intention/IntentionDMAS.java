@@ -7,5 +7,7 @@ public class IntentionDMAS extends DMAS{
 	public void setIntention(){}
 	
 	@Override
-	public void execute(){}
+	public void execute(){
+		public void 
+	}
 }

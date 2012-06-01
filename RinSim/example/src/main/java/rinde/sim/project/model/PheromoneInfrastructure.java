@@ -59,14 +59,6 @@ public class PheromoneInfrastructure<T extends Pheromone> implements TickListene
 		}
 	}
 	
-	class AcceptAll implements Predicate<T> {
-		public AcceptAll(){}
-		
-		@Override
-		public boolean apply(T input) {
-			return true;
-		}
-	
-	}
+
 
 }
