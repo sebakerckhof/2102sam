@@ -7,7 +7,7 @@ import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
 import rinde.sim.project.agent.dmas.intention.IntentionHolder;
 
-public class Package implements SimulatorUser, IntentionHolder, RoadUser{
+public class Package implements SimulatorUser, RoadUser{
 	
 	public final String packageID;
 	private Point pickupLocation;

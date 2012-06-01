@@ -7,10 +7,17 @@ import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.communication.CommunicationAPI;
 import rinde.sim.core.model.communication.Message;
 import rinde.sim.project.agent.dmas.AntAgent;
-import rinde.sim.project.model.DMASUser;
+import rinde.sim.project.agent.dmas.exploration.ExplorationDMAS;
+import rinde.sim.project.agent.dmas.intention.IntentionDMAS;
+import rinde.sim.project.agent.state.StateContext;
+import rinde.sim.project.model.AntAcceptor;
 
-public class TruckAgent implements DMASUser, TickListener, SimulatorUser{
 
+public class TruckAgent implements StateContext, AntAcceptor, TickListener, SimulatorUser{
+
+	IntentionDMAS iDmas = new IntentionDMAS();
+	ExplorationDMAS eDmas = new ExplorationDMAS();
+	
 	@Override
 	public void setSimulator(SimulatorAPI api) {
 		// TODO Auto-generated method stub
@@ -29,37 +36,10 @@ public class TruckAgent implements DMASUser, TickListener, SimulatorUser{
 		
 	}
 
-	@Override
-	public void setCommunicationAPI(CommunicationAPI api) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
-	public Point getPosition() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double getRadius() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getReliability() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void receive(Message message){
-		if(message instanceof AntAgent){
-			((AntAgent) message).visit(this);
-		}else{
-			throw new IllegalArgumentException("");
-		}
+	public void accept(AntAgent a) {
+		a.visit(this);
 	}
 
 }

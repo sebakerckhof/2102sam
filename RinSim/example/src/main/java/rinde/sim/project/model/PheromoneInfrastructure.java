@@ -27,7 +27,7 @@ public class PheromoneInfrastructure<T extends Pheromone> implements TickListene
 		this.accept = accept;
 	}
 	
-	public void add(T pheromone){
+	public void drop(T pheromone){
 		if(accept.apply(pheromone)){
 			if(pheromones.size() == this.size){
 				//remove or apply filter
@@ -38,6 +38,10 @@ public class PheromoneInfrastructure<T extends Pheromone> implements TickListene
 	
 	public LinkedList<T> smell(){
 		return new LinkedList<T>(this.pheromones);
+	}
+	
+	public boolean smell(T pheromone){
+		return pheromones.contains(pheromone);
 	}
 	
 	@Override

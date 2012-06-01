@@ -3,12 +3,13 @@ package rinde.sim.project.agent;
 import rinde.sim.core.SimulatorAPI;
 import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.TickListener;
-import rinde.sim.project.model.DMASUser;
 
-public class PackageAgent implements TickListener, SimulatorUser, DMASUser{
 
-	PickupDMASAgent pickup;
-	DestinationDMASAgent destination;
+public class PackageAgent implements TickListener, SimulatorUser{
+
+	PickupAgent pickup;
+	DestinationAgent destination;
+	
 	Package myPackage;
 	
 	@Override
@@ -28,5 +29,6 @@ public class PackageAgent implements TickListener, SimulatorUser, DMASUser{
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

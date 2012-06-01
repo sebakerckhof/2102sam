@@ -5,7 +5,8 @@ import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
 import rinde.sim.project.agent.dmas.feasibility.FeasibilityHolder;
 
-public class DeliveryLocation implements FeasibilityHolder, RoadUser{
+//Merge with package??
+public class DeliveryLocation implements RoadUser{
 
 	protected RoadModel rm;
 	
