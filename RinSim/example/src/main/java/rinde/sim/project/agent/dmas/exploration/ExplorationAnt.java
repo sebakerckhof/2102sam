@@ -16,11 +16,13 @@ public class ExplorationAnt extends AntAgent{
 	@Override
 	public void visit(TruckAgent t){
 		//check if home, report to edmas
+		
 	}
 	
 	@Override
 	public void visit(PickupAgent t) {
 		//calculate pick up cost & move to destination
+		
 	}
 
 	@Override

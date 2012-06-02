@@ -5,7 +5,7 @@ import rinde.sim.project.agent.dmas.feasibility.FeasibilityDMAS;
 import rinde.sim.project.agent.dmas.intention.IntentionHolder;
 import rinde.sim.project.agent.dmas.intention.IntentionPheromone;
 import rinde.sim.project.model.AntAcceptor;
-import rinde.sim.project.model.PheromoneInfrastructure;
+import rinde.sim.project.old.PheromoneInfrastructure;
 
 public class PickupAgent implements AntAcceptor, IntentionHolder{
 

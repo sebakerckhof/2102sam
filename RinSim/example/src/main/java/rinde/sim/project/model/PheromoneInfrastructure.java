@@ -2,61 +2,41 @@ package rinde.sim.project.model;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.google.common.base.Predicate;
 
 import rinde.sim.core.TickListener;
+import rinde.sim.project.model.Pheromone;
 
-public class PheromoneInfrastructure<T extends Pheromone> implements TickListener{
+public class PheromoneInfrastructure extends LinkedList<Pheromone>{
 
-	LinkedList<T> pheromones = new LinkedList<T>();
-	
-	Predicate<T> accept;
-	public int size; //-1 = unlimited
-	
-	public PheromoneInfrastructure(){
-		this(-1);
-	}
-	
-	public PheromoneInfrastructure(int size){
-		this.size = size;
-	}
-	
-	public PheromoneInfrastructure(Predicate<T> accept, int size){
-		this(size);
-		this.accept = accept;
-	}
-	
-	public void drop(T pheromone){
-		if(accept.apply(pheromone)){
-			if(pheromones.size() == this.size){
-				//remove or apply filter
-			}
-			pheromones.add(pheromone);
-		}
-	}
-	
-	public LinkedList<T> smell(){
-		return new LinkedList<T>(this.pheromones);
-	}
-	
-	public boolean smell(T pheromone){
-		return pheromones.contains(pheromone);
-	}
-	
-	@Override
-	public void tick(long currentTime, long timeStep) {
-		
-	}
+	public List<Pheromone> queue;
 
-	@Override
-	public void afterTick(long currentTime, long timeStep) {
-		Iterator<T> iterator = pheromones.iterator();
+	public void drop(Pheromone pheromone){
+		queue.add(pheromone);
+	}
+	
+	public LinkedList<Pheromone> smell(){
+		return new LinkedList<Pheromone>(this);
+	}
+	
+	public boolean smell(Pheromone pheromone){
+		return this.contains(pheromone);
+	}
+	
+
+	public void update(long currentTime) {
+		Iterator<Pheromone> iterator = this.iterator();
 		while(iterator.hasNext()){
-			T pheromone = iterator.next();
+			Pheromone pheromone = iterator.next();
 			if(pheromone.hasEvaporated())
 				iterator.remove();
 		}
+		
+		this.addAll(queue);
+		queue.clear();
+		
 	}
 	
 

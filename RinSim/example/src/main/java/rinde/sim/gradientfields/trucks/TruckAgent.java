@@ -74,6 +74,7 @@ public class TruckAgent implements TickListener, SimulatorUser, VirtualEntity {
 	 */
 	@Override
 	public void tick(long currentTime, long timeStep) {
+		//TODO: transform the mess into order with state pattern, if we feel like it
 		
 		if(path == null || path.isEmpty()){ 
 			if(!truck.hasLoad() && truck.tryPickup()){ //haal een pakketje op

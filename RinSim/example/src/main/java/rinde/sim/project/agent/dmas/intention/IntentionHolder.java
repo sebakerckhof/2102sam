@@ -1,6 +1,6 @@
 package rinde.sim.project.agent.dmas.intention;
 
-import rinde.sim.project.model.PheromoneInfrastructure;
+import rinde.sim.project.old.PheromoneInfrastructure;
 
 public interface IntentionHolder {
 	public PheromoneInfrastructure<IntentionPheromone> getIntentions();
