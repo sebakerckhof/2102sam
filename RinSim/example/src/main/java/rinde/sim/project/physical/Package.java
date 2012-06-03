@@ -5,7 +5,7 @@ import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
-import rinde.sim.project.agent.dmas.intention.IntentionHolder;
+import rinde.sim.project.old.IntentionHolder;
 
 public class Package implements SimulatorUser, RoadUser{
 	
@@ -15,13 +15,17 @@ public class Package implements SimulatorUser, RoadUser{
 	private boolean pickedUp;
 	private boolean delivered;
 	private SimulatorAPI simulator;
+	private long start;
+	private long deadline;
 
-	public Package(String packageID, Point pickupLocation, DeliveryLocation deliveryLocation ) {
+	public Package(String packageID, Point pickupLocation, DeliveryLocation deliveryLocation,long start,long deadline) {
 		this.packageID = packageID;
 		this.pickupLocation = pickupLocation;
 		this.deliveryLocation = deliveryLocation;
 		this.pickedUp = false;
 		this.delivered = false;
+		this.start = start;
+		this.deadline = deadline;
 	}
 	
 	public boolean needsPickUp(){
@@ -59,6 +63,22 @@ public class Package implements SimulatorUser, RoadUser{
 		return deliveryLocation.getPosition();
 	}
 	
+	public long getStart() {
+		return start;
+	}
+
+	public void setStart(long start) {
+		this.start = start;
+	}
+
+	public long getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(long deadline) {
+		this.deadline = deadline;
+	}
+
 	@Override
 	public boolean equals(Object o){
 		if(o instanceof Package)

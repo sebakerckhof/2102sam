@@ -1,6 +1,6 @@
-package rinde.sim.project.agent.dmas.feasibility;
+package rinde.sim.project.old;
 
-import rinde.sim.project.old.PheromoneInfrastructure;
+import rinde.sim.project.agent.dmas.feasibility.FeasibilityPheromone;
 
 public interface FeasibilityHolder {
 	public PheromoneInfrastructure<FeasibilityPheromone> getPheromoneInfrastructure();

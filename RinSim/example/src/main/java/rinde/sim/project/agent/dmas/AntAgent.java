@@ -6,17 +6,20 @@ import java.util.List;
 
 import rinde.sim.project.agent.DestinationAgent;
 import rinde.sim.project.agent.PackageAgent;
-import rinde.sim.project.agent.PickupAgent;
+import rinde.sim.project.agent.PackageAgent;
 import rinde.sim.project.agent.TruckAgent;
 import rinde.sim.project.model.AntAcceptor;
 import rinde.sim.project.model.DMAS;
+import rinde.sim.project.model.VirtualRoadModel;
+import rinde.sim.project.model.VirtualRoadUser;
 
-public abstract class AntAgent implements Cloneable{
+public abstract class AntAgent implements VirtualRoadUser, Cloneable{
 	
-	private int hops;
-	private int index;
-	private boolean terminated = false;
-	private List<AntAcceptor> path;
+	protected int hops;
+	protected int index;
+	protected boolean terminated = false;
+	protected List<AntAcceptor> path;
+	protected VirtualRoadModel environment;
 	
 	public AntAgent(List<AntAcceptor> path, int hops){
 		this.hops = hops;
@@ -50,9 +53,12 @@ public abstract class AntAgent implements Cloneable{
 			hops = 0;
 		
 		a.accept(this);
+		
+		if(!isTerminated())
+			this.getEnvironment().deploy(this);
 	}
 	
-	public void visit(PickupAgent t){};
+	public void visit(PackageAgent t){};
 	public void visit(DestinationAgent t){};
 	public void visit(TruckAgent t){};
 	
@@ -62,5 +68,22 @@ public abstract class AntAgent implements Cloneable{
 	
 	public void terminate(){
 		this.terminated = true;
+	}
+	
+	public boolean forward(){
+		return hops > 0;
+	}
+	
+	public boolean backward(){
+		return !forward();
+	}
+	
+	@Override
+	public void init(VirtualRoadModel vrm){
+		this.environment = vrm;
+	}
+	
+	protected VirtualRoadModel getEnvironment(){
+		return this.environment;
 	}
 }

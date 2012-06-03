@@ -1,17 +1,36 @@
 package rinde.sim.project.model;
 
+
+import rinde.sim.core.SimulatorAPI;
+import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.TickListener;
 
-public abstract class DMAS implements TickListener{
+public abstract class DMAS implements VirtualRoadUser, SimulatorUser, TickListener{
 	
 	public static final int ADAPTABILITY_RATE = 1;
-	public int sendInterval;
+	protected int sendInterval;
 	protected long previousTime;
+	protected VirtualRoadModel model;
+	protected SimulatorAPI simulator;
 	
 	public DMAS(int sendInterval){
 		this.sendInterval = sendInterval;
 	}
 	
+	@Override
+	public void init(VirtualRoadModel model) {
+		this.model = model;
+	}
+	
+	@Override
+	public void setSimulator(SimulatorAPI simulator){
+		this.simulator = simulator;
+	}
+
+	public void setModel(VirtualRoadModel model) {
+		this.model = model;
+	}
+
 	public int getSendInterval(){
 		return this.sendInterval;
 	}

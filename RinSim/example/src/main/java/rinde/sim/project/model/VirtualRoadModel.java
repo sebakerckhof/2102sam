@@ -9,12 +9,14 @@ import java.util.Queue;
 
 import org.apache.commons.math.random.RandomGenerator;
 
+import rinde.sim.core.SimulatorAPI;
+import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.TickListener;
 import rinde.sim.core.model.Model;
 import rinde.sim.core.model.communication.CommunicationModel;
 import rinde.sim.project.agent.dmas.AntAgent;
 
-public class VirtualRoadModel implements Model<AntAcceptor>, TickListener
+public class VirtualRoadModel implements Model<VirtualRoadUser>, SimulatorUser, TickListener
 {
 
 	public static final float DROP_RATE = 0.1f;
@@ -22,6 +24,7 @@ public class VirtualRoadModel implements Model<AntAcceptor>, TickListener
 	protected Map<AntAcceptor,PheromoneInfrastructure> pheromones;
 	protected Queue<AntAgent> queue;
 	protected RandomGenerator generator;
+	protected SimulatorAPI simulator;
 	
 	public VirtualRoadModel(RandomGenerator generator) {
 		this.generator = generator;
@@ -29,8 +32,13 @@ public class VirtualRoadModel implements Model<AntAcceptor>, TickListener
 	}
 	
 	public void deploy(AntAgent a){
+		simulator.register(a);
+		migrate(a);
+	}
+	
+	public void migrate(AntAgent a){
 		if(!pheromones.containsKey(a.next())){
-			throw new IllegalArgumentException("Invalid ant path");
+			a.terminate();
 		}
 		queue.add(a);
 	}
@@ -56,15 +64,18 @@ public class VirtualRoadModel implements Model<AntAcceptor>, TickListener
 		}
 	}
 
+	public void addAntAcceptor(AntAcceptor a){
+		pheromones.put(a, new PheromoneInfrastructure());
+	}
 
 	@Override
-	public boolean register(AntAcceptor element) {
-		pheromones.put(element, new PheromoneInfrastructure());
+	public boolean register(VirtualRoadUser element) {
+		element.init(this);
 		return true;
 	}
 
 	@Override
-	public boolean unregister(AntAcceptor element) {
+	public boolean unregister(VirtualRoadUser element) {
 		if(pheromones.containsKey(element)){
 			pheromones.remove(element);
 			return true;
@@ -73,8 +84,8 @@ public class VirtualRoadModel implements Model<AntAcceptor>, TickListener
 	}
 
 	@Override
-	public Class<AntAcceptor> getSupportedType() {
-		return AntAcceptor.class;
+	public Class<VirtualRoadUser> getSupportedType() {
+		return VirtualRoadUser.class;
 	}
 
 	@Override
@@ -86,24 +97,29 @@ public class VirtualRoadModel implements Model<AntAcceptor>, TickListener
 		//activate ants
 		while(!queue.isEmpty())
 		{
-			migrate(queue.poll());
+			send(queue.poll());
 		}
 		
-		//Update pheromone evaporation
+		//Update pheromone infrastructure
 		for(PheromoneInfrastructure pi : pheromones.values()){
-			pi.update(currentTime);
+			pi.update();
 		}
 		
 	}
 	
-	protected void migrate(AntAgent a){
-		if(generator.nextFloat() < DROP_RATE){ //migrate with certain probability
+	protected void send(AntAgent a){
+		if(generator.nextFloat() < DROP_RATE || !pheromones.containsKey(a.next())){ //migrate with certain probability
 			a.terminate();
 		}
 		
 		if(!a.isTerminated())
 			a.move(a.next());
 
+	}
+
+	@Override
+	public void setSimulator(SimulatorAPI api) {
+		this.simulator = api;
 	}
 
 }

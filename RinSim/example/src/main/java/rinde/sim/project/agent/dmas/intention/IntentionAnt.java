@@ -1,7 +1,7 @@
 package rinde.sim.project.agent.dmas.intention;
 
 import rinde.sim.project.agent.DestinationAgent;
-import rinde.sim.project.agent.PickupAgent;
+import rinde.sim.project.agent.PackageAgent;
 import rinde.sim.project.agent.TruckAgent;
 import rinde.sim.project.agent.dmas.AntAgent;
 import rinde.sim.project.model.AntAcceptor;
@@ -18,7 +18,7 @@ public class IntentionAnt extends AntAgent{
 	}
 	
 	@Override
-	public void visit(PickupAgent t) {
+	public void visit(PackageAgent t) {
 		//calculate pick up cost & move to destination
 	}
 

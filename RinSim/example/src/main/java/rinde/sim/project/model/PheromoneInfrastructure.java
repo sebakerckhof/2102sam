@@ -26,7 +26,8 @@ public class PheromoneInfrastructure extends LinkedList<Pheromone>{
 	}
 	
 
-	public void update(long currentTime) {
+	public void update() {
+		//Evaporate pheromones
 		Iterator<Pheromone> iterator = this.iterator();
 		while(iterator.hasNext()){
 			Pheromone pheromone = iterator.next();
@@ -34,6 +35,7 @@ public class PheromoneInfrastructure extends LinkedList<Pheromone>{
 				iterator.remove();
 		}
 		
+		//A
 		this.addAll(queue);
 		queue.clear();
 		
