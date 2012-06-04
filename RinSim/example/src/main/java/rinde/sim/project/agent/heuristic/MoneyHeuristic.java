@@ -2,7 +2,7 @@ package rinde.sim.project.agent.heuristic;
 
 import java.util.List;
 
-import rinde.sim.project.agent.PackageAgent;
+import rinde.sim.project.agent.PassengerAgent;
 
 public class MoneyHeuristic implements Heuristic{
 
@@ -13,7 +13,7 @@ public class MoneyHeuristic implements Heuristic{
 
 	
 	@Override
-	public int execute(List<PackageAgent> path) {
+	public int execute(List<PassengerAgent> path) {
 		return 0;
 	}
 	

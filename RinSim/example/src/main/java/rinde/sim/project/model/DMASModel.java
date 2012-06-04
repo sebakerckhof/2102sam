@@ -13,23 +13,27 @@ import rinde.sim.core.SimulatorAPI;
 import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.TickListener;
 import rinde.sim.core.model.Model;
+import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.communication.CommunicationModel;
-import rinde.sim.project.agent.dmas.AntAgent;
 
-public class VirtualRoadModel implements Model<VirtualRoadUser>, SimulatorUser, TickListener
+public class DMASModel implements Model<DMASUser>, SimulatorUser, TickListener
 {
 
 	public static final float DROP_RATE = 0.1f;
+	public static final float ADAPTABILITY_RATE = 1;
 	
 	protected Map<AntAcceptor,PheromoneInfrastructure> pheromones;
 	protected Queue<AntAgent> queue;
 	protected RandomGenerator generator;
 	protected SimulatorAPI simulator;
+	protected RoadModel rm;
 	
-	public VirtualRoadModel(RandomGenerator generator) {
+	public DMASModel(RoadModel rm, RandomGenerator generator) {
+		this.rm = rm;
 		this.generator = generator;
 		pheromones = new HashMap<AntAcceptor,PheromoneInfrastructure>();
 	}
+	
 	
 	public void deploy(AntAgent a){
 		simulator.register(a);
@@ -69,13 +73,13 @@ public class VirtualRoadModel implements Model<VirtualRoadUser>, SimulatorUser, 
 	}
 
 	@Override
-	public boolean register(VirtualRoadUser element) {
+	public boolean register(DMASUser element) {
 		element.init(this);
 		return true;
 	}
 
 	@Override
-	public boolean unregister(VirtualRoadUser element) {
+	public boolean unregister(DMASUser element) {
 		if(pheromones.containsKey(element)){
 			pheromones.remove(element);
 			return true;
@@ -84,8 +88,8 @@ public class VirtualRoadModel implements Model<VirtualRoadUser>, SimulatorUser, 
 	}
 
 	@Override
-	public Class<VirtualRoadUser> getSupportedType() {
-		return VirtualRoadUser.class;
+	public Class<DMASUser> getSupportedType() {
+		return DMASUser.class;
 	}
 
 	@Override

@@ -1,9 +1,9 @@
 package rinde.sim.project.agent.state;
 
-import rinde.sim.project.agent.TruckAgent;
+import rinde.sim.project.agent.TaxiAgent;
 
 public interface State{
 
-	public void execute(TruckAgent context);
+	public void execute(TaxiAgent context);
 
 }

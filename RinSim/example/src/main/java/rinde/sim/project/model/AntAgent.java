@@ -1,25 +1,28 @@
-package rinde.sim.project.agent.dmas;
+package rinde.sim.project.model;
 
-import java.util.Collection;
+
 import java.util.LinkedList;
 import java.util.List;
 
-import rinde.sim.project.agent.DestinationAgent;
-import rinde.sim.project.agent.PackageAgent;
-import rinde.sim.project.agent.PackageAgent;
-import rinde.sim.project.agent.TruckAgent;
-import rinde.sim.project.model.AntAcceptor;
-import rinde.sim.project.model.DMAS;
-import rinde.sim.project.model.VirtualRoadModel;
-import rinde.sim.project.model.VirtualRoadUser;
+import rinde.sim.core.SimulatorAPI;
+import rinde.sim.core.SimulatorUser;
+import rinde.sim.core.model.RoadModel;
+import rinde.sim.core.model.RoadUser;
+import rinde.sim.project.agent.Destination;
+import rinde.sim.project.agent.Passenger;
+import rinde.sim.project.agent.PassengerAgent;
+import rinde.sim.project.agent.TaxiAgent;
 
-public abstract class AntAgent implements VirtualRoadUser, Cloneable{
+public abstract class AntAgent implements RoadUser, SimulatorUser, DMASUser, Cloneable{
 	
 	protected int hops;
 	protected int index;
 	protected boolean terminated = false;
 	protected List<AntAcceptor> path;
-	protected VirtualRoadModel environment;
+	
+	protected DMASModel environment;
+	protected SimulatorAPI simulator;
+	protected RoadModel rm;
 	
 	public AntAgent(List<AntAcceptor> path, int hops){
 		this.hops = hops;
@@ -55,18 +58,19 @@ public abstract class AntAgent implements VirtualRoadUser, Cloneable{
 		a.accept(this);
 		
 		if(!isTerminated())
-			this.getEnvironment().deploy(this);
+			environment.deploy(this);
 	}
 	
-	public void visit(PackageAgent t){};
-	public void visit(DestinationAgent t){};
-	public void visit(TruckAgent t){};
+	public void visit(Passenger t){}
+	public void visit(Destination t){}
+	public void visit(TaxiAgent t){}
 	
 	public boolean isTerminated(){
 		return terminated;
 	}
 	
 	public void terminate(){
+		this.simulator.unregister(this);
 		this.terminated = true;
 	}
 	
@@ -79,11 +83,18 @@ public abstract class AntAgent implements VirtualRoadUser, Cloneable{
 	}
 	
 	@Override
-	public void init(VirtualRoadModel vrm){
+	public void init(DMASModel vrm){
 		this.environment = vrm;
 	}
 	
-	protected VirtualRoadModel getEnvironment(){
-		return this.environment;
+	@Override
+	public void setSimulator(SimulatorAPI api) {
+		this.simulator = api;
 	}
+	
+	@Override
+	public void initRoadUser(RoadModel model) {
+		this.rm = model;
+	}
+
 }

@@ -4,28 +4,27 @@ import rinde.sim.core.TickListener;
 import rinde.sim.core.model.communication.Message;
 
 public class Pheromone implements TickListener{
-	private long ete; //estimated time of evaporation
-	private boolean evaporated = false; 
+	private long lifetime; //time after which pheromone vaporates
 	
 	protected Pheromone(){
-		
+		this(Long.MAX_VALUE);
 	}
 	
-	public Pheromone(long ete) {
-		this.ete = ete;
+	public Pheromone(long lifetime) {
+		this.lifetime = lifetime;
 	}
 
 
-	public long getEte() {
-		return ete;
+	public long getLifetime() {
+		return lifetime;
 	}
 	
-	protected void setEte(long ete) {
-		this.ete = ete;
+	protected void setLifetime(long lifetime) {
+		this.lifetime = lifetime;
 	}
 	
 	public boolean hasEvaporated() {
-		return evaporated;
+		return lifetime < 0;
 	}
 
 	@Override
@@ -35,6 +34,6 @@ public class Pheromone implements TickListener{
 
 	@Override
 	public void tick(long currentTime, long timeStep) {
-		//evaporate
+		lifetime -= timeStep;
 	}
 }

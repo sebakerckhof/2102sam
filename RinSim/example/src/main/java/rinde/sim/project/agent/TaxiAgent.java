@@ -8,42 +8,41 @@ import rinde.sim.core.TickListener;
 import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.communication.CommunicationAPI;
 import rinde.sim.core.model.communication.Message;
-import rinde.sim.project.agent.dmas.AntAgent;
 import rinde.sim.project.agent.dmas.exploration.ExplorationDMAS;
 import rinde.sim.project.agent.dmas.intention.IntentionDMAS;
 import rinde.sim.project.agent.state.State;
 import rinde.sim.project.agent.state.StateContext;
 import rinde.sim.project.model.AntAcceptor;
-import rinde.sim.project.model.VirtualRoadModel;
-import rinde.sim.project.model.VirtualRoadUser;
-import rinde.sim.project.physical.Truck;
+import rinde.sim.project.model.AntAgent;
+import rinde.sim.project.model.DMASModel;
+import rinde.sim.project.model.DMASUser;
 
 
-public class TruckAgent implements StateContext, VirtualRoadUser, AntAcceptor, TickListener, SimulatorUser{
+public class TaxiAgent implements StateContext, AntAcceptor, TickListener, SimulatorUser{
 
 	private IntentionDMAS iDmas;
 	private ExplorationDMAS eDmas;
-	private Truck truck;
+	private Taxi taxi;
 	private SimulatorAPI simulator;
-	private VirtualRoadModel vrm;
+	private DMASModel vrm;
 	private Queue<Point> path;
 	private State state;
 	
-	public TruckAgent(Truck truck){
-		this.truck = truck;
+	public TaxiAgent(Taxi taxi){
+		this.taxi = taxi;
 	}
 	
-	public Truck getTruck(){
-		return truck;
+	public Taxi getTruck(){
+		return taxi;
 	}
 	
 	@Override
 	public void setSimulator(SimulatorAPI api) {
 		this.simulator = api;
 		
-		iDmas = new IntentionDMAS();
+		iDmas = new IntentionDMAS(this);
 		simulator.register(iDmas);
-		eDmas = new ExplorationDMAS();
+		eDmas = new ExplorationDMAS(this);
 		simulator.register(eDmas);
 	}
 
@@ -67,12 +66,7 @@ public class TruckAgent implements StateContext, VirtualRoadUser, AntAcceptor, T
 	}
 
 	@Override
-	public Point getPosition() {
-		return truck.getPosition();
-	}
-	
-	@Override
-	public void init(VirtualRoadModel rm) {
+	public void init(DMASModel rm) {
 		this.vrm = rm;
 		rm.addAntAcceptor(this);
 	}

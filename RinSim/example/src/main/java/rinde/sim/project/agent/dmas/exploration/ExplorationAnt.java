@@ -4,21 +4,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import rinde.sim.core.SimulatorAPI;
+import rinde.sim.project.agent.Destination;
 import rinde.sim.project.agent.DestinationAgent;
-import rinde.sim.project.agent.PackageAgent;
-import rinde.sim.project.agent.TruckAgent;
-import rinde.sim.project.agent.dmas.AntAgent;
+import rinde.sim.project.agent.Passenger;
+import rinde.sim.project.agent.PassengerAgent;
+import rinde.sim.project.agent.TaxiAgent;
 import rinde.sim.project.agent.dmas.feasibility.FeasibilityPheromone;
 import rinde.sim.project.model.AntAcceptor;
+import rinde.sim.project.model.AntAgent;
 
 
 public class ExplorationAnt extends AntAgent{
 
-	public Queue<PackageAgent> plan; 
+	public Queue<PassengerAgent> plan; 
 	
 	public ExplorationAnt(AntAcceptor start, int hops) {
 		super(start, hops);
-		plan = new LinkedList<PackageAgent>();
+		plan = new LinkedList<PassengerAgent>();
 	}
 	
 	@Override
@@ -31,29 +34,29 @@ public class ExplorationAnt extends AntAgent{
 	
 
 	@Override
-	public void visit(TruckAgent t){
+	public void visit(TaxiAgent t){
 		//check if home, report to edmas && terminate
 		if(t.equals(plan.peek())){
-		
+			environment.drop(t, new ExplorationPheromone());
 		}
 			
 		terminate();
 	}
 	
 	@Override
-	public void visit(PackageAgent t) {
+	public void visit(Passenger t) {
 		//calculate pick up cost & move to destination
-		if(forward()){
-			
-		}
+		path.add(t);
 	}
 
 	@Override
-	public void visit(DestinationAgent t) {
+	public void visit(Destination t) {
 		//smell feasibility, clone & spread
 		//avoid loops
-		List<FeasibilityPheromone> pheromones = getEnvironment().smell(t, FeasibilityPheromone.class);
+		List<FeasibilityPheromone> pheromones = environment.smell(t, FeasibilityPheromone.class);
 		
 	}
+
+
 	
 }

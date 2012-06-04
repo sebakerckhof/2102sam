@@ -5,12 +5,12 @@ import rinde.sim.core.SimulatorAPI;
 import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.TickListener;
 
-public abstract class DMAS implements VirtualRoadUser, SimulatorUser, TickListener{
+public abstract class DMAS implements DMASUser, SimulatorUser, TickListener{
 	
-	public static final int ADAPTABILITY_RATE = 1;
+
 	protected int sendInterval;
 	protected long previousTime;
-	protected VirtualRoadModel model;
+	protected DMASModel environment;
 	protected SimulatorAPI simulator;
 	
 	public DMAS(int sendInterval){
@@ -18,17 +18,13 @@ public abstract class DMAS implements VirtualRoadUser, SimulatorUser, TickListen
 	}
 	
 	@Override
-	public void init(VirtualRoadModel model) {
-		this.model = model;
+	public void init(DMASModel model) {
+		this.environment = model;
 	}
 	
 	@Override
 	public void setSimulator(SimulatorAPI simulator){
 		this.simulator = simulator;
-	}
-
-	public void setModel(VirtualRoadModel model) {
-		this.model = model;
 	}
 
 	public int getSendInterval(){
@@ -42,7 +38,7 @@ public abstract class DMAS implements VirtualRoadUser, SimulatorUser, TickListen
 	@Override
 	public void tick(long currentTime, long timeStep) {
 		//TODO do something better with the adaptability rate
-		if(currentTime > (previousTime + sendInterval) * ADAPTABILITY_RATE){
+		if(currentTime > (previousTime + sendInterval) * DMASModel.ADAPTABILITY_RATE){
 			execute();
 		}
 		

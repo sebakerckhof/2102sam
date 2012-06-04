@@ -1,4 +1,4 @@
-package rinde.sim.project.physical;
+package rinde.sim.project.agent;
 
 import java.util.Queue;
 import java.util.Set;
@@ -10,19 +10,20 @@ import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.MovingRoadUser;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadModel.PathProgress;
+import rinde.sim.project.old.Package;
 
 
-public class Truck implements MovingRoadUser{
+public class Taxi implements MovingRoadUser{
 
 	private RoadModel rm;
 	private Point startLocation;
 	private String truckID;
 	private double speed;
 	
-	private Package load;
-	protected static final Logger LOGGER = LoggerFactory.getLogger(Truck.class);
+	private Passenger load;
+	protected static final Logger LOGGER = LoggerFactory.getLogger(Taxi.class);
 	
-	public Truck(String truckID, Point startLocation, double speed){
+	public Taxi(String truckID, Point startLocation, double speed){
 		this.truckID = truckID;
 		this.startLocation = startLocation;
 		this.speed = speed;
@@ -63,14 +64,14 @@ public class Truck implements MovingRoadUser{
 		return load != null;
 	}
 	
-	public Package getLoad(){
+	public Passenger getLoad(){
 		return this.load;
 	}
 	
 	@Override
 	public boolean equals(Object o){
-		if(o instanceof Truck)
-			return ((Truck) o).truckID.equals(this.truckID);
+		if(o instanceof Taxi)
+			return ((Taxi) o).truckID.equals(this.truckID);
 		
 		return false;
 	}
@@ -78,9 +79,9 @@ public class Truck implements MovingRoadUser{
 	
 	public boolean tryPickup(){
 		if(load == null){
-			Set<Package> packages = rm.getObjectsAt(this, Package.class);
-			if(!packages.isEmpty()){
-				Package p = (Package) packages.toArray()[0];
+			Set<Passenger> passengers = rm.getObjectsAt(this, Passenger.class);
+			if(!passengers.isEmpty()){
+				Passenger p = (Passenger) passengers.toArray()[0];
 				load = p;
 				p.pickup();
 				LOGGER.info(this.truckID + " picked up "+p);
@@ -92,9 +93,9 @@ public class Truck implements MovingRoadUser{
 	
 	public boolean tryDelivery(){
 		if(load!=null){
-			if(load.getDeliveryLocation().equals(this.getPosition())){
+			if(load.getDestination().equals(this.getPosition())){
 				LOGGER.info(this.truckID + " delivered "+load);
-				load.deliver();
+				load.deposit();
 				load = null;
 				return true;
 			}

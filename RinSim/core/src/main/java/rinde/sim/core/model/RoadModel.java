@@ -427,6 +427,40 @@ public class RoadModel implements Model<RoadUser> {
 		}
 		return result;
 	}
+	
+	
+	//TODO: document
+	
+	public <Y extends RoadUser> Set<Y> getObjectsNearby(RoadUser u, Class<Y> type, int range){
+		return getObjectsNearby(this.getPosition(u), type, range);
+	}
+	
+	public <Y extends RoadUser> Set<Y> getObjectsNearby(Point p, Class<Y> type, int range){
+		Set<Y> result = new HashSet<Y>();
+		for (RoadUser ru : getObjects(new CloseLocationPredicate(p,type,this,range))) {
+			result.add((Y) ru);
+		}
+		return result;
+	}
+	
+	private static class CloseLocationPredicate implements Predicate<RoadUser> {
+		private final Point from;
+		private final RoadModel model;
+		private final Class<?> type;
+		private final int range;
+
+		public CloseLocationPredicate(final Point pFrom, final Class<?> pType, final RoadModel pModel, final int pRange) {
+			from = pFrom;
+			type = pType;
+			model = pModel;
+			range = pRange;
+		}
+
+		@Override
+		public boolean apply(RoadUser input) {
+			return type.isInstance(input) && Point.distance(model.getPosition(input), from) < range;
+		}
+	}
 
 	private static class SameLocationPredicate implements Predicate<RoadUser> {
 		private final RoadUser reference;

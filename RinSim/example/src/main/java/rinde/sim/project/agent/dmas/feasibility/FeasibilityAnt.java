@@ -1,27 +1,30 @@
 package rinde.sim.project.agent.dmas.feasibility;
 
-import rinde.sim.project.agent.DestinationAgent;
-import rinde.sim.project.agent.PackageAgent;
-import rinde.sim.project.agent.TruckAgent;
-import rinde.sim.project.agent.dmas.AntAgent;
+import rinde.sim.project.agent.Destination;
+import rinde.sim.project.agent.PassengerAgent;
+import rinde.sim.project.agent.Passenger;
+import rinde.sim.project.agent.TaxiAgent;
 import rinde.sim.project.model.AntAcceptor;
+import rinde.sim.project.model.AntAgent;
 import rinde.sim.project.model.Pheromone;
 
 public class FeasibilityAnt extends AntAgent{
 
-	private PackageAgent agent;
-	public FeasibilityAnt(AntAcceptor destination) {
+	private Passenger passenger;
+	
+	public FeasibilityAnt(Passenger passenger, AntAcceptor destination) {
 		super(destination,1);
+		this.passenger = passenger;
 	}
 
 	@Override
-	public void visit(DestinationAgent t) {
-		this.getEnvironment().drop(t, getPheromone());
+	public void visit(Destination t) {
+		environment.drop(t, createPheromone());
 		terminate();
 	}
 	
-	protected Pheromone getPheromone(){
-		return new FeasibilityPheromone();
+	protected Pheromone createPheromone(){
+		return new FeasibilityPheromone(passenger);
 	}
 
 

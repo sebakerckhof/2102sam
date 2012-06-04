@@ -1,11 +1,10 @@
-package rinde.sim.project.physical;
+package rinde.sim.project.old;
 
 import rinde.sim.core.SimulatorAPI;
 import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
-import rinde.sim.project.old.IntentionHolder;
 
 public class Package implements SimulatorUser, RoadUser{
 	

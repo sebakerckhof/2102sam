@@ -4,66 +4,56 @@ import rinde.sim.core.SimulatorAPI;
 import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.TickListener;
 import rinde.sim.core.graph.Point;
+import rinde.sim.core.model.RoadModel;
+import rinde.sim.core.model.RoadUser;
 import rinde.sim.gradientfields.model.virtual.FieldData;
 import rinde.sim.gradientfields.model.virtual.GradientFieldAPI;
 import rinde.sim.gradientfields.packages.Package;
-import rinde.sim.project.agent.dmas.AntAgent;
 import rinde.sim.project.agent.dmas.feasibility.FeasibilityDMAS;
 import rinde.sim.project.agent.dmas.intention.IntentionPheromone;
 import rinde.sim.project.model.AntAcceptor;
-import rinde.sim.project.model.VirtualRoadModel;
-import rinde.sim.project.model.VirtualRoadUser;
+import rinde.sim.project.model.AntAgent;
+import rinde.sim.project.model.DMASModel;
+import rinde.sim.project.model.DMASUser;
 
-public class PackageAgent implements AntAcceptor, VirtualRoadUser, SimulatorUser, TickListener{
+public class PassengerAgent implements SimulatorUser, TickListener{
 
 	private SimulatorAPI simulator;
-	private VirtualRoadModel vrm;
+	private Passenger passenger;
 	
-	private Package myPackage;
-	private double priority;
-
 	private FeasibilityDMAS fDmas;
 
-	public PackageAgent(){
-		
+	public PassengerAgent(Passenger passenger){
+		this.passenger = passenger;
+	}
+	
+	public Passenger getPassenger(){
+		return this.passenger;
 	}
 	
 
 	@Override
-	public void accept(AntAgent a) {
-		a.visit(this);
-	}
-
-
-	@Override
-	public void tick(long currentTime, long timeStep) {
-		
-	}
+	public void tick(long currentTime, long timeStep) {}
 
 
 	@Override
 	public void afterTick(long currentTime, long timeStep) {}
 
-
-	@Override
-	public Point getPosition() {
-		return myPackage.getPickupLocation();
-	}
-
-
 	@Override
 	public void setSimulator(SimulatorAPI api) {
 		this.simulator = api;
 		
-		this.fDmas = new FeasibilityDMAS();
+		this.fDmas = new FeasibilityDMAS(this);
 		api.register(fDmas);
 	}
 
 
+	
 	@Override
-	public void init(VirtualRoadModel model) {
-		this.vrm = model;
-		model.addAntAcceptor(this);
+	public boolean equals(Object o){
+		if(o instanceof PassengerAgent)
+			return passenger.equals(((PassengerAgent) o).passenger);
+		return false;
 	}
 
 

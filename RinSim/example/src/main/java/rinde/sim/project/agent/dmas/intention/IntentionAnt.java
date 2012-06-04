@@ -1,10 +1,12 @@
 package rinde.sim.project.agent.dmas.intention;
 
+import rinde.sim.project.agent.Destination;
 import rinde.sim.project.agent.DestinationAgent;
-import rinde.sim.project.agent.PackageAgent;
-import rinde.sim.project.agent.TruckAgent;
-import rinde.sim.project.agent.dmas.AntAgent;
+import rinde.sim.project.agent.Passenger;
+import rinde.sim.project.agent.PassengerAgent;
+import rinde.sim.project.agent.TaxiAgent;
 import rinde.sim.project.model.AntAcceptor;
+import rinde.sim.project.model.AntAgent;
 
 public class IntentionAnt extends AntAgent{
 
@@ -13,17 +15,17 @@ public class IntentionAnt extends AntAgent{
 	}
 
 	@Override
-	public void visit(TruckAgent t){
+	public void visit(TaxiAgent t){
 		//check if home
 	}
 	
 	@Override
-	public void visit(PackageAgent t) {
+	public void visit(Passenger t) {
 		//calculate pick up cost & move to destination
 	}
 
 	@Override
-	public void visit(DestinationAgent t) {
+	public void visit(Destination t) {
 		//smell feasibility, clone & spread
 	}
 }
