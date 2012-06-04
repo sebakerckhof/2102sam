@@ -7,6 +7,8 @@ import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
 import rinde.sim.project.agent.dmas.feasibility.FeasibilityDMAS;
+import rinde.sim.project.agent.dmas.intention.IntentionPheromone;
+import rinde.sim.project.agent.dmas.intention.ReservationPheromoneHandler;
 import rinde.sim.project.model.AntAcceptor;
 import rinde.sim.project.model.AntAgent;
 import rinde.sim.project.model.DMASModel;
@@ -16,30 +18,30 @@ import rinde.sim.project.old.Package;
 public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 	
 	public final String passengerID;
-	private Point pickupLocation;
-	private Destination destination;
-	
-	private long start;
-	private long deadline;
 
 	private boolean pickedUp;
 	private boolean deposited;
 	
+	private TransportRequest request;
+	private Destination destination;
+	
 	private SimulatorAPI simulator;
 	private DMASModel environment;
 	private RoadModel rm;
-	
-	private FeasibilityDMAS fDmas;
 
-	public Passenger(String passengerID, Point pickupLocation, Point depositLocation,long start,long deadline) {
+	public Passenger(String passengerID, TransportRequest request) {
 		this.passengerID = passengerID;
-		this.pickupLocation = pickupLocation;
+
 		this.pickedUp = false;
 		this.deposited = false;
-		this.start = start;
-		this.deadline = deadline;
 		
-		this.destination = new Destination(this,depositLocation);
+		this.request = request;
+		
+		this.destination = new Destination(this,request.getDepositLocation());
+	}
+	
+	public TransportRequest getRequest(){
+		return this.request;
 	}
 	
 	public boolean needsPickUp(){
@@ -67,29 +69,12 @@ public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 		return passengerID;
 	}
 
-	public Point getPickupLocation(){
-		return pickupLocation;
-	}
-	
+
 	public Destination getDestination(){
 		return destination;
 	}
 	
-	public long getStart() {
-		return start;
-	}
 
-	public void setStart(long start) {
-		this.start = start;
-	}
-
-	public long getDeadline() {
-		return deadline;
-	}
-
-	public void setDeadline(long deadline) {
-		this.deadline = deadline;
-	}
 
 	@Override
 	public void accept(AntAgent a) {
@@ -100,14 +85,14 @@ public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 	@Override
 	public void init(DMASModel model) {
 		this.environment = model;
-		model.addAntAcceptor(this);
+		model.addAntAcceptor(this, new ReservationPheromoneHandler());
 	}
 
 
 	@Override
 	public void initRoadUser(RoadModel model) {
 		this.rm = model;
-		rm.addObjectAt(this, this.getPickupLocation());
+		rm.addObjectAt(this, this.request.getPickupLocation());
 	}
 	
 	@Override

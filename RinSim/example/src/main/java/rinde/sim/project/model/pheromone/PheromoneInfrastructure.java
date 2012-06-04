@@ -1,4 +1,4 @@
-package rinde.sim.project.model;
+package rinde.sim.project.model.pheromone;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -7,14 +7,20 @@ import java.util.List;
 import com.google.common.base.Predicate;
 
 import rinde.sim.core.TickListener;
-import rinde.sim.project.model.Pheromone;
+import rinde.sim.project.model.pheromone.Pheromone;
 
 public class PheromoneInfrastructure extends LinkedList<Pheromone>{
 
+	public static final long serialVersionUID = 1;
 	public List<Pheromone> queue;
-
+	protected PheromoneHandler handler;
+	
+	public PheromoneInfrastructure(PheromoneHandler handler){
+		this.handler = handler;
+	}
+	
 	public void drop(Pheromone pheromone){
-		queue.add(pheromone);
+		handler.handle(this, pheromone);
 	}
 	
 	public LinkedList<Pheromone> smell(){

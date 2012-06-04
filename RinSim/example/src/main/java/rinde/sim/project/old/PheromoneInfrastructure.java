@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import com.google.common.base.Predicate;
 
 import rinde.sim.core.TickListener;
-import rinde.sim.project.model.Pheromone;
+import rinde.sim.project.model.pheromone.Pheromone;
 
 public class PheromoneInfrastructure<T extends Pheromone> implements TickListener{
 

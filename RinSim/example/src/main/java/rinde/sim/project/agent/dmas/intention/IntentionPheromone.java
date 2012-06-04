@@ -1,7 +1,7 @@
 package rinde.sim.project.agent.dmas.intention;
 
 import rinde.sim.project.model.DMASModel;
-import rinde.sim.project.model.Pheromone;
+import rinde.sim.project.model.pheromone.Pheromone;
 
 public class IntentionPheromone extends Pheromone{
 	private static final long DEFAULT_LIFETIME = 500;

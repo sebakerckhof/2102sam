@@ -3,6 +3,7 @@ package rinde.sim.project.agent.dmas.exploration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import rinde.sim.core.SimulatorAPI;
 import rinde.sim.project.agent.Destination;
@@ -11,17 +12,18 @@ import rinde.sim.project.agent.Passenger;
 import rinde.sim.project.agent.PassengerAgent;
 import rinde.sim.project.agent.TaxiAgent;
 import rinde.sim.project.agent.dmas.feasibility.FeasibilityPheromone;
+import rinde.sim.project.agent.dmas.intention.IntentionPheromone;
 import rinde.sim.project.model.AntAcceptor;
 import rinde.sim.project.model.AntAgent;
 
 
 public class ExplorationAnt extends AntAgent{
 
-	public Queue<PassengerAgent> plan; 
+	public Queue<Passenger> plan; 
 	
 	public ExplorationAnt(AntAcceptor start, int hops) {
 		super(start, hops);
-		plan = new LinkedList<PassengerAgent>();
+		plan = new LinkedList<Passenger>();
 	}
 	
 	@Override
@@ -37,7 +39,7 @@ public class ExplorationAnt extends AntAgent{
 	public void visit(TaxiAgent t){
 		//check if home, report to edmas && terminate
 		if(t.equals(plan.peek())){
-			environment.drop(t, new ExplorationPheromone());
+			environment.drop(t, new ExplorationPheromone(plan));
 		}
 			
 		terminate();
@@ -46,7 +48,11 @@ public class ExplorationAnt extends AntAgent{
 	@Override
 	public void visit(Passenger t) {
 		//calculate pick up cost & move to destination
-		path.add(t);
+		List<IntentionPheromone> pheromones = environment.smell(t, IntentionPheromone.class);
+		if(pheromones.isEmpty())
+			path.add(t);
+		else
+			terminate();
 	}
 
 	@Override

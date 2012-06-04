@@ -6,7 +6,7 @@ import rinde.sim.project.agent.Passenger;
 import rinde.sim.project.agent.TaxiAgent;
 import rinde.sim.project.model.AntAcceptor;
 import rinde.sim.project.model.AntAgent;
-import rinde.sim.project.model.Pheromone;
+import rinde.sim.project.model.pheromone.Pheromone;
 
 public class FeasibilityAnt extends AntAgent{
 

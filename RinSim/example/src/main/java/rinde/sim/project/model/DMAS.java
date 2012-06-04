@@ -8,12 +8,12 @@ import rinde.sim.core.TickListener;
 public abstract class DMAS implements DMASUser, SimulatorUser, TickListener{
 	
 
-	protected int sendInterval;
+	protected long sendInterval;
 	protected long previousTime;
 	protected DMASModel environment;
 	protected SimulatorAPI simulator;
 	
-	public DMAS(int sendInterval){
+	public DMAS(long sendInterval){
 		this.sendInterval = sendInterval;
 	}
 	
@@ -27,7 +27,7 @@ public abstract class DMAS implements DMASUser, SimulatorUser, TickListener{
 		this.simulator = simulator;
 	}
 
-	public int getSendInterval(){
+	public long getSendInterval(){
 		return this.sendInterval;
 	}
 	

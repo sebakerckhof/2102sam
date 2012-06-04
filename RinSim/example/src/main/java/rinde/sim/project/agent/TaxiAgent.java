@@ -20,8 +20,8 @@ import rinde.sim.project.model.DMASUser;
 
 public class TaxiAgent implements StateContext, AntAcceptor, TickListener, SimulatorUser{
 
-	private IntentionDMAS iDmas;
-	private ExplorationDMAS eDmas;
+	public IntentionDMAS iDmas;
+	public ExplorationDMAS eDmas;
 	private Taxi taxi;
 	private SimulatorAPI simulator;
 	private DMASModel vrm;

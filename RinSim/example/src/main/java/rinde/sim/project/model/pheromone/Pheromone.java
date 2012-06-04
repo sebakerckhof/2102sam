@@ -1,4 +1,4 @@
-package rinde.sim.project.model;
+package rinde.sim.project.model.pheromone;
 
 import rinde.sim.core.TickListener;
 import rinde.sim.core.model.communication.Message;
@@ -28,9 +28,7 @@ public class Pheromone implements TickListener{
 	}
 
 	@Override
-	public void afterTick(long currentTime, long timeStep) {
-		
-	}
+	public void afterTick(long currentTime, long timeStep) {}
 
 	@Override
 	public void tick(long currentTime, long timeStep) {

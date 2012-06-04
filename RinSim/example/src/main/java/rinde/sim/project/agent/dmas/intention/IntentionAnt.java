@@ -16,16 +16,16 @@ public class IntentionAnt extends AntAgent{
 
 	@Override
 	public void visit(TaxiAgent t){
-		//check if home
+		t.iDmas.report(this);
 	}
 	
 	@Override
 	public void visit(Passenger t) {
-		//calculate pick up cost & move to destination
+		if(environment.drop(t, new IntentionPheromone())){
+			
+		}else{
+			terminate();
+		}
 	}
 
-	@Override
-	public void visit(Destination t) {
-		//smell feasibility, clone & spread
-	}
 }

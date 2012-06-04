@@ -5,6 +5,7 @@ import java.util.Set;
 
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
+import rinde.sim.project.Utils;
 import rinde.sim.project.agent.Destination;
 import rinde.sim.project.agent.Passenger;
 import rinde.sim.project.agent.TaxiAgent;
@@ -13,7 +14,7 @@ import rinde.sim.project.model.DMAS;
 public class ExplorationDMAS extends DMAS implements RoadUser{
 	
 	public static final int EXPLORATION_DEPTH = 3;
-	public static final int DEFAULT_INTERVAL = 500;
+	public static final long DEFAULT_INTERVAL = Utils.minutesToMicroSeconds(60);
 	
 	private RoadModel rm;
 	private TaxiAgent agent;
@@ -22,7 +23,7 @@ public class ExplorationDMAS extends DMAS implements RoadUser{
 		this(agent, DEFAULT_INTERVAL);
 	}
 	
-	public ExplorationDMAS(TaxiAgent agent, int interval) {
+	public ExplorationDMAS(TaxiAgent agent, long interval) {
 		super(interval);
 		this.agent = agent;
 	}

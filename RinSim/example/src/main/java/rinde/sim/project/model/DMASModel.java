@@ -15,6 +15,10 @@ import rinde.sim.core.TickListener;
 import rinde.sim.core.model.Model;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.communication.CommunicationModel;
+import rinde.sim.project.model.pheromone.DefaultHandler;
+import rinde.sim.project.model.pheromone.Pheromone;
+import rinde.sim.project.model.pheromone.PheromoneHandler;
+import rinde.sim.project.model.pheromone.PheromoneInfrastructure;
 
 public class DMASModel implements Model<DMASUser>, SimulatorUser, TickListener
 {
@@ -69,7 +73,11 @@ public class DMASModel implements Model<DMASUser>, SimulatorUser, TickListener
 	}
 
 	public void addAntAcceptor(AntAcceptor a){
-		pheromones.put(a, new PheromoneInfrastructure());
+		this.addAntAcceptor(a, new DefaultHandler());
+	}
+	
+	public void addAntAcceptor(AntAcceptor a, PheromoneHandler handler){
+		pheromones.put(a, new PheromoneInfrastructure(handler));
 	}
 
 	@Override
