@@ -38,13 +38,13 @@ public abstract class DMAS implements DMASUser, SimulatorUser, TickListener{
 	@Override
 	public void tick(long currentTime, long timeStep) {
 		//TODO do something better with the adaptability rate
-		if(currentTime > (previousTime + sendInterval) * DMASModel.ADAPTABILITY_RATE){
-			execute();
+		if(currentTime > (previousTime + sendInterval) * (1 / DMASModel.ADAPTABILITY_RATE)){
+			execute(currentTime, timeStep);
 		}
 		
 	}
 	
-	public abstract void execute();
+	public abstract void execute(long currentTime, long timeStep);
 
 	@Override
 	public void afterTick(long currentTime, long timeStep) {}

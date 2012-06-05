@@ -14,6 +14,7 @@ import rinde.sim.project.model.DMASModel;
 import rinde.sim.project.model.DMASUser;
 import rinde.sim.project.old.FeasibilityHolder;
 import rinde.sim.project.old.PheromoneInfrastructure;
+import rinde.sim.util.Tuple;
 
 public class Destination implements AntAcceptor, RoadUser, SimulatorUser{
 
@@ -21,15 +22,22 @@ public class Destination implements AntAcceptor, RoadUser, SimulatorUser{
 	private RoadModel rm;
 	private SimulatorAPI simulator;
 	private Passenger passenger;
-	
-	private Point location;
+	private TransportRequest request;
 
 
-	public Destination(Passenger passenger, Point location){
+	public Destination(Passenger passenger, TransportRequest request){
 		this.passenger = passenger;
-		this.location = location;
+		this.request = request;
 	}
 	
+	public Point getPosition(){
+		return request.getDepositLocation();
+	}
+	
+	public TransportRequest getRequest() {
+		return request;
+	}
+
 	public Passenger getPassenger(){
 		return this.passenger;
 	}
@@ -56,7 +64,10 @@ public class Destination implements AntAcceptor, RoadUser, SimulatorUser{
 	@Override
 	public void initRoadUser(RoadModel model) {
 		this.rm = model;
-		rm.addObjectAt(this, location);
+		rm.addObjectAt(this, request.getDepositLocation());
+		Tuple<Long,Long> data = rm.getTravelData(Taxi.SPEED, request.getPickupLocation(), request.getDepositLocation());
+		request.setTravelDistance(data.getKey());
+		request.setTravelTime(data.getValue());
 	}
 
 	@Override

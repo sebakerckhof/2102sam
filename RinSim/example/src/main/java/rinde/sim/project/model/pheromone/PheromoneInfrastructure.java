@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.common.base.Predicate;
 
 import rinde.sim.core.TickListener;
+import rinde.sim.project.model.AntAcceptor;
 import rinde.sim.project.model.pheromone.Pheromone;
 
 public class PheromoneInfrastructure extends LinkedList<Pheromone>{
@@ -19,12 +20,23 @@ public class PheromoneInfrastructure extends LinkedList<Pheromone>{
 		this.handler = handler;
 	}
 	
-	public void drop(Pheromone pheromone){
-		handler.handle(this, pheromone);
+	public boolean drop(Pheromone pheromone){
+		return handler.handle(this, pheromone);
 	}
 	
 	public LinkedList<Pheromone> smell(){
 		return new LinkedList<Pheromone>(this);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <Y extends Pheromone> List<Y> smell(Class<Y> type){
+		LinkedList<Y> p = new LinkedList<Y>();
+		for(Pheromone pheromone : this.smell()){
+			if(type.isInstance(pheromone))
+				p.add((Y) pheromone);
+		}
+		
+		return p;
 	}
 	
 	public boolean smell(Pheromone pheromone){

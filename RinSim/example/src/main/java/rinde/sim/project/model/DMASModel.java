@@ -51,22 +51,18 @@ public class DMASModel implements Model<DMASUser>, SimulatorUser, TickListener
 		queue.add(a);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public <Y extends Pheromone> List<Y> smell(AntAcceptor a, Class<Y> type){
 		LinkedList<Y> p = new LinkedList<Y>();
 		if(pheromones.containsKey(a)){
-			for(Pheromone pheromone : pheromones.get(a).smell()){
-				if(type.isInstance(pheromone))
-					p.add((Y) pheromone);
-			}
+			pheromones.get(a).smell(type);
 		}
 		
 		return p;
 	}
 	
-	public void drop(AntAcceptor a, Pheromone p){
+	public boolean drop(AntAcceptor a, Pheromone p){
 		if(pheromones.containsKey(a)){
-			pheromones.get(a).drop(p);
+			return pheromones.get(a).drop(p);
 		}else{
 			throw new IllegalArgumentException("Hier kunnen geen feromonen gedropped worden");
 		}

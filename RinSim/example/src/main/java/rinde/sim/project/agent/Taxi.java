@@ -15,22 +15,28 @@ import rinde.sim.project.old.Package;
 
 public class Taxi implements MovingRoadUser{
 
+	public static final int SPEED = 100; //TODO: convert
+	
 	private RoadModel rm;
 	private Point startLocation;
-	private String truckID;
+	private String taxiID;
 	private double speed;
 	
-	private Passenger load;
+	private Passenger passenger;
 	protected static final Logger LOGGER = LoggerFactory.getLogger(Taxi.class);
 	
-	public Taxi(String truckID, Point startLocation, double speed){
-		this.truckID = truckID;
+	public Taxi(String taxiID, Point startLocation){
+		this(taxiID, startLocation, SPEED);
+	}
+	
+	public Taxi(String taxiID, Point startLocation, double speed){
+		this.taxiID = taxiID;
 		this.startLocation = startLocation;
 		this.speed = speed;
 	}
 	
-	public String getTruckID(){
-		return truckID;
+	public String getTaxiID(){
+		return taxiID;
 	}
 	
 	@Override
@@ -60,31 +66,30 @@ public class Taxi implements MovingRoadUser{
 		return rm.getLastCrossRoad(this);
 	}
 	
-	public boolean hasLoad(){
-		return load != null;
+	public boolean hasPassenger(){
+		return passenger != null;
 	}
 	
-	public Passenger getLoad(){
-		return this.load;
+	public Passenger getPassenger(){
+		return this.passenger;
 	}
 	
 	@Override
 	public boolean equals(Object o){
 		if(o instanceof Taxi)
-			return ((Taxi) o).truckID.equals(this.truckID);
+			return ((Taxi) o).taxiID.equals(this.taxiID);
 		
 		return false;
 	}
 	
 	
 	public boolean tryPickup(){
-		if(load == null){
+		if(passenger == null){
 			Set<Passenger> passengers = rm.getObjectsAt(this, Passenger.class);
 			if(!passengers.isEmpty()){
-				Passenger p = (Passenger) passengers.toArray()[0];
-				load = p;
-				p.pickup();
-				LOGGER.info(this.truckID + " picked up "+p);
+				passenger = (Passenger) passengers.toArray()[0];
+				passenger.pickup();
+				LOGGER.info(this.taxiID + " picked up "+passenger);
 				return true;
 			}
 		}
@@ -92,11 +97,11 @@ public class Taxi implements MovingRoadUser{
 	}
 	
 	public boolean tryDelivery(){
-		if(load!=null){
-			if(load.getDestination().equals(this.getPosition())){
-				LOGGER.info(this.truckID + " delivered "+load);
-				load.deposit();
-				load = null;
+		if(passenger!=null){
+			if(passenger.getDestination().equals(this.getPosition())){
+				LOGGER.info(this.taxiID + " delivered "+passenger);
+				passenger.deposit();
+				passenger = null;
 				return true;
 			}
 		}

@@ -37,7 +37,7 @@ public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 		
 		this.request = request;
 		
-		this.destination = new Destination(this,request.getDepositLocation());
+		this.destination = new Destination(this,request);
 	}
 	
 	public TransportRequest getRequest(){
@@ -107,6 +107,10 @@ public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 	public void setSimulator(SimulatorAPI api) {
 		this.simulator = api;
 		simulator.register(destination);
+	}
+
+	public Point getPosition() {
+		return request.getPickupLocation();
 	}
 
 }

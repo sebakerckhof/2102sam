@@ -5,15 +5,15 @@ import java.util.Set;
 
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
-import rinde.sim.project.Utils;
 import rinde.sim.project.agent.Destination;
 import rinde.sim.project.agent.Passenger;
 import rinde.sim.project.agent.PassengerAgent;
 import rinde.sim.project.model.DMAS;
+import rinde.sim.project.util.Utils;
 
 public class FeasibilityDMAS extends DMAS implements RoadUser{
 	
-	public static final long DEFAULT_INTERVAL = Utils.minutesToMicroSeconds(50);
+	public static final long DEFAULT_INTERVAL = Utils.timeConverter.min(60).toTime();
 	private RoadModel rm;
 	private PassengerAgent agent;
 	
@@ -27,7 +27,7 @@ public class FeasibilityDMAS extends DMAS implements RoadUser{
 	}
 
 	@Override
-	public void execute(){
+	public void execute(long currentTime, long timeStep){
 		//spread pickup information
 		Set<Destination > destinations = rm.getObjectsNearby(agent.getPassenger().getRequest().getPickupLocation(), Destination.class, 50);
 		for(Destination d : destinations){

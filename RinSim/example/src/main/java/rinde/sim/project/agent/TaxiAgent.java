@@ -32,7 +32,7 @@ public class TaxiAgent implements StateContext, AntAcceptor, TickListener, Simul
 		this.taxi = taxi;
 	}
 	
-	public Taxi getTruck(){
+	public Taxi getTaxi(){
 		return taxi;
 	}
 	

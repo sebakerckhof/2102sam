@@ -3,10 +3,12 @@ package rinde.sim.project.agent.dmas.feasibility;
 import rinde.sim.project.agent.Destination;
 import rinde.sim.project.agent.PassengerAgent;
 import rinde.sim.project.agent.Passenger;
+import rinde.sim.project.agent.Taxi;
 import rinde.sim.project.agent.TaxiAgent;
 import rinde.sim.project.model.AntAcceptor;
 import rinde.sim.project.model.AntAgent;
 import rinde.sim.project.model.pheromone.Pheromone;
+import rinde.sim.util.Tuple;
 
 public class FeasibilityAnt extends AntAgent{
 
@@ -19,13 +21,9 @@ public class FeasibilityAnt extends AntAgent{
 
 	@Override
 	public void visit(Destination t) {
-		environment.drop(t, createPheromone());
+		Tuple<Long,Long> data = rm.getTravelData(Taxi.SPEED, passenger.getPosition(), t.getPosition());
+		environment.drop(t, new FeasibilityPheromone(passenger, data.getKey(), data.getValue()));
 		terminate();
 	}
 	
-	protected Pheromone createPheromone(){
-		return new FeasibilityPheromone(passenger);
-	}
-
-
 }

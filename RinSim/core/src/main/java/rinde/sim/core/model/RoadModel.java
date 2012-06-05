@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import rinde.sim.util.Tuple;
 
 import rinde.sim.core.graph.Connection;
 import rinde.sim.core.graph.EdgeData;
@@ -145,6 +146,7 @@ public class RoadModel implements Model<RoadUser> {
 	public boolean equalPosition(RoadUser obj1, RoadUser obj2) {
 		return containsObject(obj1) && containsObject(obj2) && getPosition(obj1).equals(getPosition(obj2));
 	}
+
 
 	/**
 	 * This method moves the specified {@link RoadUser} using the specified path
@@ -300,12 +302,26 @@ public class RoadModel implements Model<RoadUser> {
 		if (object == null) {
 			throw new IllegalArgumentException("object can not be null");
 		}
+		return getMaxSpeed(object.getSpeed(), from, to);
+	}
+	
+	/**
+	 * Compute speed of the object taking into account the speed limits of the
+	 * object
+	 * @param speed speed of travelling object
+	 * @param from the point on the graph object is located
+	 * @param to the next point on the path it want to reach
+	 */
+	protected double getMaxSpeed(double speed, Point from, Point to) {
+		if (Double.isNaN(speed) || speed == 0) {
+			throw new IllegalArgumentException("speed can not be null");
+		}
 		if (from == null) {
 			throw new IllegalArgumentException("from can not be null");
 		}
 		checkArgument(to != null, "to can not be null");
 		if (from.equals(to)) {
-			return object.getSpeed();
+			return speed;
 		}
 
 		Point start = from instanceof MidPoint ? ((MidPoint) from).loc.from : from;
@@ -314,10 +330,10 @@ public class RoadModel implements Model<RoadUser> {
 		EdgeData data = graph.connectionData(start, stop);
 		if (data instanceof MultiAttributeEdgeData) {
 			MultiAttributeEdgeData maed = (MultiAttributeEdgeData) data;
-			double speed = maed.getMaxSpeed();
-			return Double.isNaN(speed) ? object.getSpeed() : Math.min(speed, object.getSpeed());
+			double speedLimit = maed.getMaxSpeed();
+			return Double.isNaN(speedLimit) ? speedLimit : Math.min(speedLimit, speed);
 		}
-		return object.getSpeed();
+		return speed;
 	}
 
 	/**
@@ -431,6 +447,43 @@ public class RoadModel implements Model<RoadUser> {
 	
 	//TODO: document
 	
+	public Tuple<Long,Long> getTravelData(double speed, Point from, Point to){
+		List<Point> path = getShortestPathTo(from, to);
+		double time = 0;
+		double distance = 0;
+		Point previous = from;
+		for(Point p : path){
+			//TODO: check units, currently: #KM / kmh = h
+			time += Point.distance(previous, p) / getMaxSpeed(speed,previous,p);
+			distance += Point.distance(previous, p);
+			previous = p;
+		}
+		return new Tuple<Long,Long>(Math.round(distance), Math.round(time));
+	}
+	
+	public long getFastestTravelTime(double speed, Point from, Point to){
+		return getTravelData(speed,from,to).getValue();
+	}
+	
+	public long getTravelTime(MovingRoadUser u, Point from, Point to){
+		return getFastestTravelTime(u.getSpeed(), from, to);
+	}
+	
+	public long getTravelDistance(RoadUser user, Point to){
+		return getTravelDistance(this.getPosition(user), to);
+	}
+	
+	public long getTravelDistance(Point from, Point to){
+		List<Point> path = getShortestPathTo(from, to);
+		double distance = 0;
+		Point previous = from;
+		for(Point p : path){
+			distance += Point.distance(previous, p);
+			previous = p;
+		}
+		return Math.round(distance);
+	}
+	
 	public <Y extends RoadUser> Set<Y> getObjectsNearby(RoadUser u, Class<Y> type, int range){
 		return getObjectsNearby(this.getPosition(u), type, range);
 	}
@@ -461,6 +514,7 @@ public class RoadModel implements Model<RoadUser> {
 			return type.isInstance(input) && Point.distance(model.getPosition(input), from) < range;
 		}
 	}
+	//TODO end document
 
 	private static class SameLocationPredicate implements Predicate<RoadUser> {
 		private final RoadUser reference;
