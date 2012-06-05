@@ -66,7 +66,7 @@ public class ExplorationDMAS extends DMAS implements RoadUser{
 	public void execute(long currentTime, long timeStep){
 
 		if(agent.getTaxi().hasPassenger()){ //Not going anywhere special now (= no passenger)
-			ExplorationAnt ant = new ExplorationAnt(agent.getTaxi(), currentTime, agent.getTaxi().getPassenger().getDestination(), EXPLORATION_DEPTH);
+			ExplorationAnt ant = new ExplorationAnt(agent.getTaxi(), currentTime, agent.getTaxi().getPassenger().getRequest().getDestination(), EXPLORATION_DEPTH);
 			this.environment.deploy(ant);
 		}else{	//start from current passengers destination
 			Set<Passenger> passengers = rm.getObjectsNearby(agent.getTaxi().getPosition(), Passenger.class, 500);

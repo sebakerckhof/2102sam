@@ -4,7 +4,7 @@ import java.util.Set;
 
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
-import rinde.sim.project.agent.Destination;
+import rinde.sim.project.agent.LocationAgent;
 import rinde.sim.project.agent.Passenger;
 import rinde.sim.project.model.DMAS;
 import rinde.sim.project.util.Utils;
@@ -58,9 +58,9 @@ public class FeasibilityDMAS extends DMAS implements RoadUser{
 	@Override
 	public void execute(long currentTime, long timeStep){
 		//spread pickup information
-		Set<Destination > destinations = rm.getObjectsNearby(passenger.getRequest().getPickupLocation(), Destination.class, 50);
-		for(Destination d : destinations){
-			if(!d.equals(passenger.getDestination())){
+		Set<LocationAgent > locationAgents = rm.getObjectsNearby(passenger.getRequest().getPickupLocation(), LocationAgent.class, 50);
+		for(LocationAgent d : locationAgents){
+			if(!d.equals(passenger.getRequest().getDestination())){
 				FeasibilityAnt ant = new FeasibilityAnt(passenger,d);
 				simulator.register(ant);
 			}

@@ -8,7 +8,7 @@ import rinde.sim.core.SimulatorAPI;
 import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
-import rinde.sim.project.agent.Destination;
+import rinde.sim.project.agent.LocationAgent;
 import rinde.sim.project.agent.Passenger;
 import rinde.sim.project.agent.TaxiAgent;
 
@@ -78,7 +78,7 @@ public abstract class AntAgent implements RoadUser, SimulatorUser, DMASUser, Clo
 	 * VISITOR PATTERN
 	 */
 	public void visit(Passenger t){}
-	public void visit(Destination t){}
+	public void visit(LocationAgent t){}
 	public void visit(TaxiAgent t){}
 	
 	/**

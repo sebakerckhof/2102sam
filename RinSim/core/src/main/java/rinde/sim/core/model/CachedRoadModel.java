@@ -11,6 +11,7 @@ import java.util.Set;
 
 import rinde.sim.core.graph.Graph;
 import rinde.sim.core.graph.Point;
+import rinde.sim.util.Tuple;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.LinkedHashMultimap;
@@ -26,11 +27,16 @@ public class CachedRoadModel extends RoadModel {
 	private Table<Point, Point, List<Point>> pathTable;
 
 	private final Multimap<Class<?>, RoadUser> classObjectMap;
-
+	
+	private final Table<Point,Point, Long> distanceTable;
+	private final Table<Point,Point, Long> timeTable;
+	
 	public CachedRoadModel(Graph<?> pGraph) {
 		super(pGraph);
 		pathTable = HashBasedTable.create();
 		classObjectMap = LinkedHashMultimap.create();
+		distanceTable = HashBasedTable.create();
+		timeTable = HashBasedTable.create();
 	}
 
 	public void setPathCache(Table<Point, Point, List<Point>> pPathTable) {
@@ -84,6 +90,37 @@ public class CachedRoadModel extends RoadModel {
 	public void removeObject(RoadUser o) {
 		super.removeObject(o);
 		classObjectMap.remove(o.getClass(), o);
+	}
+	
+	/**
+	 * {@link RoadModel#getTravelData(double, Point, Point)}
+	 * +caching support
+	 */
+	@Override
+	public Tuple<Long,Long> getTravelData(double speed, Point from, Point to){
+		if(distanceTable.contains(from, to) && timeTable.contains(from, to)){
+			return new Tuple<Long,Long>(distanceTable.get(from, to), timeTable.get(from, to));
+		}else{
+			Tuple<Long,Long> data = super.getTravelData(speed, from, to);
+			distanceTable.put(from, to, data.getKey());
+			timeTable.put(from, to, data.getValue());
+			return data;
+		}
+	}
+	
+	/**
+	 * {@link RoadModel#getTravelDistance(Point, Point)}
+	 * +caching support
+	 */
+	@Override
+	public long getTravelDistance(Point from, Point to){
+		if(distanceTable.contains(from, to)){
+			return distanceTable.get(from, to);
+		}else{
+			long distance = super.getTravelDistance(from, to);
+			distanceTable.put(from, to, distance);
+			return distance;
+		}
 	}
 
 }

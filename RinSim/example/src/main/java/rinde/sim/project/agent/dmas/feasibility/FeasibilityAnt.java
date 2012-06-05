@@ -1,6 +1,6 @@
 package rinde.sim.project.agent.dmas.feasibility;
 
-import rinde.sim.project.agent.Destination;
+import rinde.sim.project.agent.LocationAgent;
 import rinde.sim.project.agent.Passenger;
 import rinde.sim.project.agent.Taxi;
 import rinde.sim.project.model.AntAcceptor;
@@ -28,11 +28,11 @@ public class FeasibilityAnt extends AntAgent{
 	}
 
 	/**
-	 * {@link #visit(Destination)}
+	 * {@link #visit(LocationAgent)}
 	 * Spread PheasibilityPheromone containing a reference to the passenger and the travel information to help exploration ants
 	 */
 	@Override
-	public void visit(Destination t) {
+	public void visit(LocationAgent t) {
 		Tuple<Long,Long> data = rm.getTravelData(Taxi.SPEED, passenger.getPosition(), t.getPosition());
 		environment.drop(t, new FeasibilityPheromone(passenger, data.getKey(), data.getValue()));
 		terminate();

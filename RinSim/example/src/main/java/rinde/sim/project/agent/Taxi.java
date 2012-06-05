@@ -112,7 +112,7 @@ public class Taxi implements MovingRoadUser{
 	 */
 	public boolean tryDeposit(){
 		if(passenger!=null){
-			if(passenger.getDestination().getPosition().equals(this.getPosition())){
+			if(passenger.getRequest().getDestination().getPosition().equals(this.getPosition())){
 				LOGGER.info(this.taxiID + " delivered "+passenger);
 				passenger.deposit();
 				passenger = null;

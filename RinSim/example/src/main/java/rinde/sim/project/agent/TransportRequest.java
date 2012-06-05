@@ -16,7 +16,7 @@ public class TransportRequest implements Comparable<TransportRequest>{
 	/**
 	 * Request to be deposited at this location
 	 */
-	private final Point depositLocation;
+	private final LocationAgent destination;
 	
 	/**
 	 * Request to be picked up starting from this time
@@ -41,13 +41,13 @@ public class TransportRequest implements Comparable<TransportRequest>{
 	/**
 	 * Constructor
 	 * @param pickupLocation	Request to be picked up at this location
-	 * @param depositLocation	Request to be deposited at this location
+	 * @param destination		Request to be deposited at this location
 	 * @param start				Request to be picked up starting from this time
 	 * @param deadline			Request to be deposited before this time
 	 */		
-	public TransportRequest(Point pickupLocation, Point depositLocation,long start,long deadline){
+	public TransportRequest(Point pickupLocation, LocationAgent destination,long start,long deadline){
 		this.pickupLocation = pickupLocation;
-		this.depositLocation = depositLocation;
+		this.destination = destination;
 		this.start = start;
 		this.deadline = deadline;
 	}
@@ -78,10 +78,9 @@ public class TransportRequest implements Comparable<TransportRequest>{
 		return pickupLocation;
 	}
 	
-	public Point getDepositLocation(){
-		return depositLocation;
+	public LocationAgent getDestination(){
+		return destination;
 	}
-	
 
 	public long getStart() {
 		return start;
@@ -107,4 +106,5 @@ public class TransportRequest implements Comparable<TransportRequest>{
 		else return 1;
 			
 	}
+
 }

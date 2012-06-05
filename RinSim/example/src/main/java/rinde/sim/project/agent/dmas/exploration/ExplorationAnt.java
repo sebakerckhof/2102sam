@@ -7,7 +7,7 @@ import java.util.Queue;
 
 import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
-import rinde.sim.project.agent.Destination;
+import rinde.sim.project.agent.LocationAgent;
 import rinde.sim.project.agent.Passenger;
 import rinde.sim.project.agent.Plan;
 import rinde.sim.project.agent.Taxi;
@@ -136,9 +136,9 @@ public class ExplorationAnt extends AntAgent{
 			plan.addPassenger(p, nextData.getKey(), nextData.getValue());
 			
 			//Make sure we visit the destination to find next passengers
-			path.add(p.getDestination());
+			path.add(p.getRequest().getDestination());
 			
-			nextData = null;
+			nextData = rm.getTravelData(taxi.getSpeed(), p.getRequest().getPickupLocation(), p.getRequest().getDestination().getPosition());
 		}else{
 			//if not possible, terminate
 			terminate();
@@ -146,22 +146,22 @@ public class ExplorationAnt extends AntAgent{
 	}
 
 	/**
-	 * {@link #visit(Destination)}
-	 * On visiting a destination node, we smell for feasibility data left by other passengers
+	 * {@link #visit(LocationAgent)}
+	 * On visiting a location node, we smell for feasibility data left by other passengers
 	 * We clone towards the passengers most in need of transportation (least left time)
 	 */
 	@Override
-	public void visit(Destination d) {
+	public void visit(LocationAgent l) {
 	
 		//Update arrival time
 		if(estimatedArrival == 0){ //This is our first node, so taxi is already on the way
-			updateEstimatedArrival(taxi.getPosition(), d.getPosition());
+			updateEstimatedArrival(taxi.getPosition(), l.getPosition());
 		}else{ //We yet have to pick up the passenger for this destination
-			updateEstimatedArrival(d.getRequest().getTravelTime());
+			updateEstimatedArrival(nextData.getValue());
 		}
 		
 		//Smell for feasibility pheromones
-		List<FeasibilityPheromone> pheromones = environment.smell(d, FeasibilityPheromone.class);
+		List<FeasibilityPheromone> pheromones = environment.smell(l, FeasibilityPheromone.class);
 		
 		if(pheromones.isEmpty()){ //No information = we're done here
 			hops = 0;

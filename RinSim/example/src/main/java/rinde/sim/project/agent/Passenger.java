@@ -36,11 +36,7 @@ public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 	 * The request this passenger has
 	 */
 	private final TransportRequest request;
-	
-	/**
-	 * The destination agent
-	 */
-	private final Destination destination;
+
 	
 	/**
 	 * Feasiblity DMAS that spread passenger information
@@ -66,8 +62,6 @@ public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 		this.deposited = false;
 		
 		this.request = request;
-		
-		this.destination = new Destination(this,request);
 	}
 	
 	/**
@@ -122,10 +116,6 @@ public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 		return passengerID;
 	}
 	
-	public Destination getDestination(){
-		return destination;
-	}
-	
 
 	/**
 	 * API BINDING
@@ -155,8 +145,7 @@ public class Passenger implements AntAcceptor, RoadUser, SimulatorUser{
 	@Override
 	public void setSimulator(SimulatorAPI api) {
 		this.simulator = api;
-		simulator.register(destination);
-		
+
 		this.fDmas = new FeasibilityDMAS(this);
 		api.register(fDmas);
 	}

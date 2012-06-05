@@ -445,8 +445,16 @@ public class RoadModel implements Model<RoadUser> {
 	}
 	
 	
-	//TODO: document
-	
+	/**
+	 * Get Travel Data
+	 * Calculates total distance & travel time for shortest path between given points
+	 * 
+	 * @param speed	Maximum speed of traveller
+	 * @param from	Start point
+	 * @param to	End point
+	 * 
+	 * @return Tuple containing distance & travel time for shortest path between given points
+	 */
 	public Tuple<Long,Long> getTravelData(double speed, Point from, Point to){
 		List<Point> path = getShortestPathTo(from, to);
 		double time = 0;
@@ -461,18 +469,33 @@ public class RoadModel implements Model<RoadUser> {
 		return new Tuple<Long,Long>(Math.round(distance), Math.round(time));
 	}
 	
+	/**
+	 * {@link #getTravelData(double, Point, Point)}
+	 */
 	public long getTravelTime(double speed, Point from, Point to){
 		return getTravelData(speed,from,to).getValue();
 	}
 	
+	/**
+	 * {@link #getTravelData(double, Point, Point)}
+	 */
 	public long getTravelTime(MovingRoadUser u, Point from, Point to){
 		return getTravelTime(u.getSpeed(), from, to);
 	}
 	
+	/**
+	 * {@link #getTravelDistance(Point, Point)}
+	 */
 	public long getTravelDistance(RoadUser user, Point to){
 		return getTravelDistance(this.getPosition(user), to);
 	}
 	
+	/**
+	 * Calculates total distance for shortest path between given points
+	 * @param from	Start point
+	 * @param to	End point
+	 * @return	Total distance for shortest path between the points
+	 */
 	public long getTravelDistance(Point from, Point to){
 		List<Point> path = getShortestPathTo(from, to);
 		double distance = 0;
