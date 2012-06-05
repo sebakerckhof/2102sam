@@ -36,7 +36,6 @@ public class GradientFieldModel implements Model<VirtualEntity>, GradientFieldAP
 	public GradientFieldModel(ExtendedRoadModel rm){
 		this();
 		this.rm = rm;
-		//TODO exercise
 	}
 
 	@Override

@@ -3,9 +3,6 @@ package rinde.sim.project.agent.heuristic;
 import java.util.List;
 
 import rinde.sim.project.agent.Passenger;
-import rinde.sim.project.agent.PassengerAgent;
-import rinde.sim.project.agent.Taxi;
-import rinde.sim.util.Tuple;
 
 public class MoneyHeuristic implements Heuristic{
 
@@ -16,8 +13,11 @@ public class MoneyHeuristic implements Heuristic{
 
 	
 	//TODO: convert units
+	/**
+	 * {@link Heuristic#execute(List, List, List)}
+	 */
 	@Override
-	public float execute(Taxi taxi, List<Passenger> path, List<Long> distances, List<Long> travelTimes) {
+	public float execute(List<Passenger> path, List<Long> distances, List<Long> travelTimes) {
 		float result = 0;
 		int i = 0;
 		for(Passenger p : path){

@@ -10,8 +10,8 @@ import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.event.Event;
 import rinde.sim.gradientfields.packages.DeliveryLocation;
-import rinde.sim.gradientfields.packages.Package;
-import rinde.sim.gradientfields.trucks.*;
+import rinde.sim.gradientfields.packages.Passenger;
+import rinde.sim.gradientfields.taxi.*;
 import rinde.sim.gradientfields.packages.*;
 import rinde.sim.scenario.ConfigurationException;
 import rinde.sim.scenario.Scenario;
@@ -57,8 +57,8 @@ public class SimpleController extends ScenarioController{
 	@Override
 	protected boolean createUserInterface() {
 		UiSchema schema = new UiSchema();
-		schema.add(Truck.class, new RGB(0,0,255));
-		schema.add(Package.class, new RGB(255,0,0));
+		schema.add(Taxi.class, new RGB(0,0,255));
+		schema.add(Passenger.class, new RGB(255,0,0));
 		schema.add(DeliveryLocation.class, new RGB(0,255,0));
 
 		View.startGui(getSimulator(), 3, new ObjectRenderer(roadModel, schema, false));
@@ -68,9 +68,9 @@ public class SimpleController extends ScenarioController{
 
 	@Override
 	protected boolean handleAddTruck(Event e) {
-		Truck truck = new Truck("Truck-"+truckID++, graph.getRandomNode(getSimulator().getRandomGenerator()), 7);
-		getSimulator().register(truck);
-		TruckAgent agent = new TruckAgent(truck, 5);
+		Taxi taxi = new Taxi("Truck-"+truckID++, graph.getRandomNode(getSimulator().getRandomGenerator()), 7);
+		getSimulator().register(taxi);
+		TaxiAgent agent = new TaxiAgent(taxi, 5);
 		getSimulator().register(agent);
 		return true;
 	}	
@@ -82,9 +82,9 @@ public class SimpleController extends ScenarioController{
 		getSimulator().register(pl);
 		getSimulator().register(dl);
 		
-		Package p = new Package("Package-"+packageID++, pl, dl);
+		Passenger p = new Passenger("Package-"+packageID++, pl, dl);
 		getSimulator().register(p);
-		PackageAgent agent = new PackageAgent(p);
+		PassengerAgent agent = new PassengerAgent(p);
 		getSimulator().register(agent);
 		return true;
 	}

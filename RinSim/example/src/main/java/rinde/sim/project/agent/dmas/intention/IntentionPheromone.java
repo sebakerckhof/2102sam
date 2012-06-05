@@ -5,13 +5,17 @@ import rinde.sim.project.model.DMASModel;
 import rinde.sim.project.model.pheromone.Pheromone;
 
 public class IntentionPheromone extends Pheromone implements Comparable<IntentionPheromone>{
+	
+	/**
+	 * Default lifetime of this pheromone
+	 */
 	private static final long DEFAULT_LIFETIME = IntentionDMAS.DEFAULT_INTERVAL;
 	
 	public final float cost;
 	public final Taxi taxi;
 	
 	public IntentionPheromone(Taxi taxi, float cost){
-		super(Math.round(DEFAULT_LIFETIME  * (1 / DMASModel.ADAPTABILITY_RATE)));
+		super(Math.round(DEFAULT_LIFETIME));
 		this.cost = cost;
 		this.taxi = taxi;
 	}

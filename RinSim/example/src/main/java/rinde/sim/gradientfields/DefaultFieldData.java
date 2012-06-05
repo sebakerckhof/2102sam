@@ -7,13 +7,15 @@ import rinde.sim.gradientfields.model.virtual.VirtualEntity;
 /**
  * Implementatie van de field data
  */
-public class FieldDataImpl implements FieldData{
+public class DefaultFieldData implements FieldData{
 	protected final FieldType type;
 	protected final VirtualEntity entity;
+	protected final float strengthMultiplier;
 	
-	public FieldDataImpl(FieldType type, VirtualEntity entity){
+	public DefaultFieldData(FieldType type, VirtualEntity entity, float strengthMultiplier){
 		this.type = type;
 		this.entity = entity;
+		this.strengthMultiplier = strengthMultiplier;
 	}
 
 	@Override
@@ -29,6 +31,11 @@ public class FieldDataImpl implements FieldData{
 	@Override
 	public float getRadius() {
 		return type.getRadius();
+	}
+
+	@Override
+	public float getStrength() {
+		return type.getStrength() * this.strengthMultiplier;
 	}
 	
 }

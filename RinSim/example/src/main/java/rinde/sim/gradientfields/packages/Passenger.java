@@ -5,23 +5,32 @@ import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.core.model.RoadUser;
+import rinde.sim.gradientfields.taxi.Taxi;
 
-public class Package implements SimulatorUser, RoadUser{
-	public final String packageID;
+public class Passenger implements SimulatorUser, RoadUser{
+	public final String passengerID;
 	private Point pickupLocation;
 	private DeliveryLocation deliveryLocation;
+	private Long travelTime;
+
 	private boolean pickedUp;
 	private boolean delivered;
 	private SimulatorAPI simulator;
+	private long deadline;
 
-	public Package(String packageID, Point pickupLocation, DeliveryLocation deliveryLocation ) {
-		this.packageID = packageID;
+	public Passenger(String passengerID, Point pickupLocation, DeliveryLocation deliveryLocation, long deadline) {
+		this.passengerID = passengerID;
 		this.pickupLocation = pickupLocation;
 		this.deliveryLocation = deliveryLocation;
 		this.pickedUp = false;
 		this.delivered = false;
+		this.deadline = deadline;
 	}
 	
+	public long getDeadline() {
+		return deadline;
+	}
+
 	public boolean needsPickUp(){
 		return !pickedUp;
 	}
@@ -40,13 +49,13 @@ public class Package implements SimulatorUser, RoadUser{
 		this.simulator.unregister(deliveryLocation);
 	}
 	
-	public String getPackageID(){
-		return packageID;
+	public String getPassengerID(){
+		return passengerID;
 	}
 	
 	@Override
 	public String toString() {
-		return packageID;
+		return passengerID;
 	}
 
 	public Point getPickupLocation(){
@@ -62,9 +71,14 @@ public class Package implements SimulatorUser, RoadUser{
 		this.simulator = api;
 	}
 
+	public Long getTravelTime() {
+		return travelTime;
+	}
+	
 	@Override
 	public void initRoadUser(RoadModel model) {
 		model.addObjectAt(this, pickupLocation);
+		this.travelTime = model.getTravelTime(Taxi.SPEED, this.pickupLocation, this.deliveryLocation.getPosition());
 	}
 
 }

@@ -461,12 +461,12 @@ public class RoadModel implements Model<RoadUser> {
 		return new Tuple<Long,Long>(Math.round(distance), Math.round(time));
 	}
 	
-	public long getFastestTravelTime(double speed, Point from, Point to){
+	public long getTravelTime(double speed, Point from, Point to){
 		return getTravelData(speed,from,to).getValue();
 	}
 	
 	public long getTravelTime(MovingRoadUser u, Point from, Point to){
-		return getFastestTravelTime(u.getSpeed(), from, to);
+		return getTravelTime(u.getSpeed(), from, to);
 	}
 	
 	public long getTravelDistance(RoadUser user, Point to){

@@ -17,7 +17,7 @@ import rinde.sim.core.model.RoadUser;
 import rinde.sim.gradientfields.model.virtual.Field;
 import rinde.sim.gradientfields.model.virtual.GradientFieldModel;
 import rinde.sim.gradientfields.model.virtual.VirtualEntity;
-import rinde.sim.gradientfields.trucks.TruckAgent;
+import rinde.sim.gradientfields.taxi.TaxiAgent;
 import rinde.sim.ui.renderers.Renderer;
 import rinde.sim.ui.renderers.UiSchema;
 
@@ -58,8 +58,8 @@ public class FieldRenderer implements Renderer {
 			for (VirtualEntity e : entities) {
 			
 				//dirty hack, but works
-				if(e instanceof TruckAgent){
-					TruckAgent agent = (TruckAgent) e;
+				if(e instanceof TaxiAgent){
+					TaxiAgent agent = (TaxiAgent) e;
 					Collection<Field> fields = gfm.getFieldsFrom(agent);
 					final int x1 = (int) (xOrigin + (e.getPosition().x - minX) * m) - radius;
 					final int y1 = (int) (yOrigin + (e.getPosition().y - minY) * m) - radius;

@@ -4,26 +4,27 @@ import rinde.sim.core.SimulatorAPI;
 import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.TickListener;
 import rinde.sim.core.graph.Point;
-import rinde.sim.gradientfields.FieldDataImpl;
+import rinde.sim.gradientfields.AutoAdjustingFieldData;
+import rinde.sim.gradientfields.DefaultFieldData;
 import rinde.sim.gradientfields.model.virtual.FieldType;
 import rinde.sim.gradientfields.model.virtual.FieldData;
 import rinde.sim.gradientfields.model.virtual.GradientFieldAPI;
 import rinde.sim.gradientfields.model.virtual.VirtualEntity;
 
 
-public class PackageAgent implements TickListener, SimulatorUser, VirtualEntity {
+public class PassengerAgent implements TickListener, SimulatorUser, VirtualEntity {
 
 	private SimulatorAPI simulator;
-	private Package myPackage;
+	private final Passenger passenger;
 	private double priority;
 	private GradientFieldAPI api;
-	private FieldData fieldData; 
-
-
-	public PackageAgent(Package myPackage){
+	private float fieldMultiplier;
+	private final FieldData fieldData;
+	
+	public PassengerAgent(Passenger passenger){
 		this.priority = 1;
-		this.myPackage = myPackage;
-		this.fieldData = new FieldDataImpl(FieldType.ATTRACTIVE, this);
+		this.passenger = passenger;
+		this.fieldData = new AutoAdjustingFieldData(FieldType.ATTRACTIVE, this, 1);
 	}
 
 	@Override
@@ -33,16 +34,13 @@ public class PackageAgent implements TickListener, SimulatorUser, VirtualEntity 
 
 	@Override
 	public void tick(long currentTime, long timeStep) {
-		// TODO Auto-generated method stub
-		if(this.myPackage.delivered())
+		if(this.passenger.delivered())
 			this.simulator.unregister(this);
-
 	}
 
 	@Override
 	public void afterTick(long currentTime, long timeStep) {
-		// TODO Auto-generated method stub
-
+		fieldMultiplier = 1000 /passenger.getDeadline() - passenger.getTravelTime() - currentTime;
 	}
 
 	public double getPriority() {
@@ -60,17 +58,21 @@ public class PackageAgent implements TickListener, SimulatorUser, VirtualEntity 
 
 	@Override
 	public boolean isEmitting() {
-		return !myPackage.delivered() && myPackage.needsPickUp();
+		return !passenger.delivered() && passenger.needsPickUp();
 	}
 
 	@Override
 	public Point getPosition() {
-		return myPackage.getPickupLocation();
+		return passenger.getPickupLocation();
 	}
 
 	@Override
 	public FieldData getFieldData() {
-		return fieldData;
+		return new AutoAdjustingFieldData(FieldType.ATTRACTIVE, this, 1);
+	}
+	
+	public float getMultiplier(){
+		return fieldMultiplier;
 	}
 
 }

@@ -1,4 +1,4 @@
-package rinde.sim.gradientfields.trucks;
+package rinde.sim.gradientfields.taxi;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -9,24 +9,24 @@ import rinde.sim.core.SimulatorUser;
 import rinde.sim.core.TickListener;
 import rinde.sim.core.graph.Point;
 import rinde.sim.gradientfields.model.virtual.*;
-import rinde.sim.gradientfields.FieldDataImpl;
+import rinde.sim.gradientfields.DefaultFieldData;
 import rinde.sim.gradientfields.packages.*;
 
 
-public class TruckAgent implements TickListener, SimulatorUser, VirtualEntity {
+public class TaxiAgent implements TickListener, SimulatorUser, VirtualEntity {
 
 	private SimulatorAPI simulator;
 	private Queue<Point> path;
-	private Truck truck;
+	private Taxi taxi;
 	
 	private boolean isEmitting;
 	private GradientFieldAPI api;
 	private FieldData fieldData; 
 	
-	public TruckAgent(Truck truck, int timerInterval){
+	public TaxiAgent(Taxi taxi, int timerInterval){
 		this.isEmitting = true;
-		this.truck = truck;
-		this.fieldData = new FieldDataImpl(FieldType.REPULSIVE, this);
+		this.taxi = taxi;
+		this.fieldData = new DefaultFieldData(FieldType.REPULSIVE, this, 1);
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class TruckAgent implements TickListener, SimulatorUser, VirtualEntity {
 				double temp = 0;
 				switch(f.getFieldData().getType()){
 					case ATTRACTIVE:
-						temp = ((PackageAgent) f.getFieldData().getEntity()).getPriority() * FieldType.ATTRACTIVE.getStrength();
+						temp = ((PassengerAgent) f.getFieldData().getEntity()).getPriority() * FieldType.ATTRACTIVE.getStrength();
 						break;
 					case REPULSIVE:
 						temp = -1 * FieldType.REPULSIVE.getStrength();
@@ -74,22 +74,22 @@ public class TruckAgent implements TickListener, SimulatorUser, VirtualEntity {
 	 */
 	@Override
 	public void tick(long currentTime, long timeStep) {
-		//TODO: transform the mess into order with state pattern, if we feel like it
+		//TODO: transform the mess into order with state pattern (if we feel like it)
 		
 		if(path == null || path.isEmpty()){ 
-			if(!truck.hasLoad() && truck.tryPickup()){ //haal een pakketje op
+			if(!taxi.hasLoad() && taxi.tryPickup()){ //haal een pakketje op
 				this.isEmitting = false; //terwijl je naar je bestemming rijdt is het niet nodig een field uit te sturen
-				this.path = new LinkedList<Point>(truck.getRoadModel().getShortestPathTo(truck, truck.getLoad().getDeliveryLocation()));
+				this.path = new LinkedList<Point>(taxi.getRoadModel().getShortestPathTo(taxi, taxi.getLoad().getDeliveryLocation()));
 			}else{
-				if(truck.hasLoad() && truck.tryDelivery()) //lever een pakketje af
+				if(taxi.hasLoad() && taxi.tryDelivery()) //lever een pakketje af
 					this.isEmitting = true; //Je bent op zoek naar een nieuw pakketje, hou andere trucks dus weg met je gradient field
 				
 				Field f = this.getStrongestField();
 				if(f != null){ // Rij naar het sterkste gradient field
-					this.path = new LinkedList<Point>(truck.getRoadModel().getShortestPathTo(truck, f.getFieldData().getEntity().getPosition()));
+					this.path = new LinkedList<Point>(taxi.getRoadModel().getShortestPathTo(taxi, f.getFieldData().getEntity().getPosition()));
 				}else{ //als er in de buurt geen gradient field waarneembaar is, rij dan enkele stappen naar in een willekeurige richting, tot je wel een field waarneemt
-					Point destination = truck.getRoadModel().getGraph().getRandomNode(simulator.getRandomGenerator());
-					LinkedList<Point> fullpath = new LinkedList<Point>(truck.getRoadModel().getShortestPathTo(truck, destination));
+					Point destination = taxi.getRoadModel().getGraph().getRandomNode(simulator.getRandomGenerator());
+					LinkedList<Point> fullpath = new LinkedList<Point>(taxi.getRoadModel().getShortestPathTo(taxi, destination));
 					this.path = new LinkedList<Point>();
 					for(int i = 0; i < Math.max(1, fullpath.size()); i++){
 						path.add(fullpath.poll());
@@ -97,7 +97,7 @@ public class TruckAgent implements TickListener, SimulatorUser, VirtualEntity {
 				}
 			}
 		}else{ //berij het vastgelegde pad
-			truck.drive(path, timeStep);
+			taxi.drive(path, timeStep);
 		}
 		
 		
@@ -105,10 +105,7 @@ public class TruckAgent implements TickListener, SimulatorUser, VirtualEntity {
 	}
 
 	@Override
-	public void afterTick(long currentTime, long timeStep) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void afterTick(long currentTime, long timeStep) {}
 
 	@Override
 	public void init(GradientFieldAPI api) {
@@ -122,7 +119,7 @@ public class TruckAgent implements TickListener, SimulatorUser, VirtualEntity {
 
 	@Override
 	public Point getPosition() {
-		return this.truck.getPosition();
+		return this.taxi.getPosition();
 	}
 
 	@Override

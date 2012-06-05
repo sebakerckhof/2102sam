@@ -2,16 +2,49 @@ package rinde.sim.project.agent;
 
 import rinde.sim.core.graph.Point;
 
+/**
+ * Transport Request
+ * Contains all information for a taxi call
+ */
 public class TransportRequest implements Comparable<TransportRequest>{
-	private Point pickupLocation;
-	private Point depositLocation;
 	
-	private long start;
-	private long deadline;
+	/**
+	 * Request to be picked up at this location
+	 */
+	private final Point pickupLocation;
 	
+	/**
+	 * Request to be deposited at this location
+	 */
+	private final Point depositLocation;
+	
+	/**
+	 * Request to be picked up starting from this time
+	 */
+	private final long start;
+	
+	/**
+	 * Request to be deposited before this time
+	 */
+	private final long deadline;
+	
+	/**
+	 * Travel time of shortest path between pickup & deposit location, based on standard taxi speed {@link Taxi#SPEED}
+	 */
 	private long travelTime;
+	
+	/**
+	 * Length of shortest path between pickup & deposit location
+	 */
 	private long travelDistance;
 	
+	/**
+	 * Constructor
+	 * @param pickupLocation	Request to be picked up at this location
+	 * @param depositLocation	Request to be deposited at this location
+	 * @param start				Request to be picked up starting from this time
+	 * @param deadline			Request to be deposited before this time
+	 */		
 	public TransportRequest(Point pickupLocation, Point depositLocation,long start,long deadline){
 		this.pickupLocation = pickupLocation;
 		this.depositLocation = depositLocation;
@@ -19,8 +52,11 @@ public class TransportRequest implements Comparable<TransportRequest>{
 		this.deadline = deadline;
 	}
 	
+	/**
+	 * GETTERS & SETTERS
+	 */
 	public long getTravelDistance() {
-		return travelTime;
+		return travelDistance;
 	}
 
 
@@ -51,18 +87,14 @@ public class TransportRequest implements Comparable<TransportRequest>{
 		return start;
 	}
 
-	public void setStart(long start) {
-		this.start = start;
-	}
-
 	public long getDeadline() {
 		return deadline;
 	}
 
-	public void setDeadline(long deadline) {
-		this.deadline = deadline;
-	}
-	
+
+	/**
+	 * EXTRA METHODS
+	 */
 	@Override
 	public int compareTo(TransportRequest r){
 		long timeLeft = deadline-travelTime;
