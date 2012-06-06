@@ -68,7 +68,7 @@ public class SimpleController extends ScenarioController{
 
 	@Override
 	protected boolean handleAddTruck(Event e) {
-		Taxi taxi = new Taxi("Truck-"+truckID++, graph.getRandomNode(getSimulator().getRandomGenerator()), 7);
+		Taxi taxi = new Taxi("Taxi-"+truckID++, graph.getRandomNode(getSimulator().getRandomGenerator()), 7);
 		getSimulator().register(taxi);
 		TaxiAgent agent = new TaxiAgent(taxi, 5);
 		getSimulator().register(agent);
@@ -82,7 +82,8 @@ public class SimpleController extends ScenarioController{
 		getSimulator().register(pl);
 		getSimulator().register(dl);
 		
-		Passenger p = new Passenger("Package-"+packageID++, pl, dl);
+		long traveltime = roadModel.getTravelTime(Taxi.SPEED, pl, dl.getPosition());
+		Passenger p = new Passenger("Passenger-"+packageID++, pl, dl, 500);
 		getSimulator().register(p);
 		PassengerAgent agent = new PassengerAgent(p);
 		getSimulator().register(agent);

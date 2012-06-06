@@ -34,7 +34,7 @@ public class Example {
 				)
 		);
 		
-		int timeStep = 1000000;
+		int timeStep = 10000;
 		
 		builder.add(
 				new ScenarioBuilder.TimeSeries<TimedEvent>(
@@ -50,7 +50,7 @@ public class Example {
 		
 		Scenario scenario = builder.build();
 		
-		final String MAP_DIR = "../../git-repos/RinSim/core/files/maps/";
+		final String MAP_DIR = "../core/files/maps/";
 
 		new SimpleController(scenario, -1, MAP_DIR + "leuven-simple.dot");		
 	}
