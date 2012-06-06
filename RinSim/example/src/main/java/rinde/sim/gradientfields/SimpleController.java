@@ -9,6 +9,9 @@ import rinde.sim.core.graph.MultiAttributeEdgeData;
 import rinde.sim.core.graph.Point;
 import rinde.sim.core.model.RoadModel;
 import rinde.sim.event.Event;
+import rinde.sim.gradientfields.model.ExtendedRoadModel;
+import rinde.sim.gradientfields.model.virtual.GradientFieldAPI;
+import rinde.sim.gradientfields.model.virtual.GradientFieldModel;
 import rinde.sim.gradientfields.packages.DeliveryLocation;
 import rinde.sim.gradientfields.packages.Passenger;
 import rinde.sim.gradientfields.taxi.*;
@@ -26,7 +29,7 @@ public class SimpleController extends ScenarioController{
 
 	String map;
 	
-	private RoadModel roadModel;
+	private ExtendedRoadModel roadModel;
 	
 	private int truckID = 0;
 	private int packageID = 0;
@@ -46,11 +49,13 @@ public class SimpleController extends ScenarioController{
 		} catch (Exception e) {
 			throw new ConfigurationException("e:", e);
 		}
-		roadModel = new RoadModel(graph);
-
+		roadModel = new ExtendedRoadModel(graph);
+		GradientFieldAPI gfapi = new GradientFieldModel(roadModel);
+		
 		MersenneTwister rand = new MersenneTwister(123);
 		Simulator s = new Simulator(rand, 10000);
 		s.register(roadModel);
+		s.register(gfapi);
 		return s;	
 	}
 	
@@ -82,7 +87,7 @@ public class SimpleController extends ScenarioController{
 		getSimulator().register(pl);
 		getSimulator().register(dl);
 		
-		long traveltime = roadModel.getTravelTime(Taxi.SPEED, pl, dl.getPosition());
+		//long traveltime = roadModel.getTravelTime(Taxi.SPEED, pl, dl.getPosition());
 		Passenger p = new Passenger("Passenger-"+packageID++, pl, dl, 500);
 		getSimulator().register(p);
 		PassengerAgent agent = new PassengerAgent(p);

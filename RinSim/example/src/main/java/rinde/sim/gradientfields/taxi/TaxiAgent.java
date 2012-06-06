@@ -96,9 +96,11 @@ public class TaxiAgent implements TickListener, SimulatorUser, VirtualEntity {
 					}
 				}
 			}
-		}else{ //berij het vastgelegde pad
-			taxi.drive(path, timeStep);
 		}
+		
+		//berij het vastgelegde pad
+		taxi.drive(path, timeStep);
+		
 		
 		
 		
@@ -108,8 +110,8 @@ public class TaxiAgent implements TickListener, SimulatorUser, VirtualEntity {
 	public void afterTick(long currentTime, long timeStep) {}
 
 	@Override
-	public void init(GradientFieldAPI api) {
-		this.api = api;
+	public void init(GradientFieldAPI gfapi) {
+		this.api = gfapi;
 	}
 
 	@Override

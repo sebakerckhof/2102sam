@@ -5,7 +5,7 @@ package rinde.sim.gradientfields.model.virtual;
  */
 public enum FieldType{
 
-	ATTRACTIVE(1,20000), REPULSIVE(1,20000);
+	ATTRACTIVE(1,25000), REPULSIVE(1,25000);
 	
 	private float strength;
 	private float radius;
