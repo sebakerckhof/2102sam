@@ -78,7 +78,7 @@ public class Passenger implements SimulatorUser, RoadUser{
 	@Override
 	public void initRoadUser(RoadModel model) {
 		model.addObjectAt(this, pickupLocation);
-		this.travelTime = model.getTravelTime(Taxi.SPEED, this.pickupLocation, this.deliveryLocation.getPosition());
+		//this.travelTime = model.getTravelTime(Taxi.SPEED, this.pickupLocation, this.deliveryLocation.getPosition());
 	}
 
 }

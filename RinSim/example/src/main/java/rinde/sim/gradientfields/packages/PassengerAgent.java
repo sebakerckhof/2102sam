@@ -40,7 +40,7 @@ public class PassengerAgent implements TickListener, SimulatorUser, VirtualEntit
 
 	@Override
 	public void afterTick(long currentTime, long timeStep) {
-		fieldMultiplier = 1000 /passenger.getDeadline() - passenger.getTravelTime() - currentTime;
+		//fieldMultiplier = 1000 /passenger.getDeadline() - passenger.getTravelTime() - currentTime;
 	}
 
 	public double getPriority() {
