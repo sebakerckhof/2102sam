@@ -93,13 +93,13 @@ public class TruckAgent implements TickListener, SimulatorUser,
 		RoadModel rm = truck.getRoadModel();
 		if (currentTask != null) {
 			Point pos = truck.getPosition();
-			if (pos.equals(currentTask.getDeliveryLocation())) {
-				truck.tryDelivery();
-				currentTask = null;
-			} else if (pos.equals(currentTask.getPickupLocation())) {
+			if (pos.equals(currentTask.getPickupLocation()) && !truck.hasLoad()) {
 				truck.tryPickup();
 				path = new LinkedList<Point>(rm.getShortestPathTo(truck,
 								currentTask.getDeliveryLocation()));
+			} else if (pos.equals(currentTask.getDeliveryLocation())) {
+				truck.tryDelivery();
+				currentTask = null;
 			}
 		}
 		if (currentTask == null) {
